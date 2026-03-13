@@ -1,10 +1,16 @@
-import Logo from "@/components/Logo";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import AppSidebar from "@/components/AppSidebar";
 
-
-const Sidebar: React.FC = () => (
-  <aside className="row-span-full flex flex-col gap-8 bg-grey-0 py-8 px-6 border border-solid border-grey-100">
-    <Logo />
-  </aside>
-)
+const Sidebar = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <SidebarProvider>
+      <AppSidebar />
+      <main>
+        <SidebarTrigger />
+        {children}
+      </main>
+    </SidebarProvider>
+  );
+};
 
 export default Sidebar;

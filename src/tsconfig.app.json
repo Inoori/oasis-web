@@ -31,30 +31,6 @@
     "paths": {
       "@/*": [
         "*"
-      ],
-      "@/components/*": [
-        "components/*"
-      ],
-      "@/features/*": [
-        "features/*"
-      ],
-      "@/pages/*": [
-        "pages/*"
-      ],
-      "@/services/*": [
-        "services/*"
-      ],
-      "@/hooks/*": [
-        "hooks/*"
-      ],
-      "@/utils/*": [
-        "utils/*"
-      ],
-      "@/styles/*": [
-        "styles/*"
-      ],
-      "@/data/*": [
-        "data/*"
       ]
     },
   },

@@ -4,7 +4,6 @@ import { HiOutlineUser } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
 // import DarkModeToggle from "@/components/DarkModeToggle";
 
-
 const HeaderMenu: React.FC = () => {
   const navigate = useNavigate();
 
@@ -22,7 +21,7 @@ const HeaderMenu: React.FC = () => {
       <li>
         <DarkModeToggle />
       </li> */}
-    </ul >
+    </ul>
   );
-}
+};
 export default HeaderMenu;
