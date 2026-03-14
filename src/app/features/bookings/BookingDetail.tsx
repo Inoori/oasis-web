@@ -1,19 +1,25 @@
 import { Spinner } from "@/components/ui/spinner";
 import { useBookings } from "./useBooking";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import BookingBadge from "./BookingBadge";
 import { Button } from "@/components/ui/button";
-import { HiArrowLeft } from "react-icons/hi2";
+import { HiArrowDownOnSquare, HiArrowLeft } from "react-icons/hi2";
+import { useMoveBack } from "@/hooks/useMoveBack";
+import BookingDataBox from "./BookingDataBox";
+import type { BookingWithRelations } from "./BookingTable";
 
 export default function BookingDetail() {
   const { id } = useParams();
   const { data: bookings, isPending } = useBookings({
+    queryKey: [id!],
     $filter: `Id eq ${id}`,
     $expand:
-      "Cabin($select(Name)),Guest($select(FullName,Email,CountryFlag,NationalID))",
+      "Cabin($select=Name),Guest($select=FullName,Email,CountryFlag,NationalID)",
   });
 
-  const booking = bookings?.[0];
+  const moveBack = useMoveBack();
+
+  const booking = bookings?.[0] as BookingWithRelations;
 
   if (isPending) return <Spinner className="mx-auto size-12" />;
 
@@ -26,13 +32,27 @@ export default function BookingDetail() {
           <h1 className="text-3xl font-bold">{`Booking #${booking.Id}`}</h1>
           <BookingBadge status={booking.Status} />
         </div>
-        <Button
-          variant="ghost"
-          className="rounded-sm text-center font-medium transition-all duration-300"
-        >
-          <HiArrowLeft className="mr-1 text-accent-foreground" />
+      </div>
+
+      <BookingDataBox booking={booking} />
+
+      <div className="mt-2 flex justify-end gap-3">
+        <Button variant="outline" onClick={moveBack}>
+          <HiArrowLeft />
           Back
         </Button>
+        {booking.Status === "UnConfirmed" && (
+          <Link to={`/checkin/${booking.Id}`}>
+            <Button>
+              <HiArrowDownOnSquare />
+              Check in
+            </Button>
+          </Link>
+        )}
+
+        {booking.Status === "CheckedIn" && (
+          <Button disabled={false}>Check out</Button>
+        )}
       </div>
     </>
   );

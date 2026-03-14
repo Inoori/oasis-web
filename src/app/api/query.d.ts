@@ -1,4 +1,5 @@
 export interface QueryParams {
+  queryKey?: any[];
   $select?: string;
   $filter?: string;
   $expand?: string;

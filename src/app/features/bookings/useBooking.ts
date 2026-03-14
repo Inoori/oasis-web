@@ -7,7 +7,9 @@ export const BOOKINGS_TABLE = "bookings";
 
 export function useBookings(query: QueryParams = {}) {
   return useQuery({
-    queryKey: [BOOKINGS_TABLE],
+    queryKey: query.queryKey
+      ? [...query.queryKey, BOOKINGS_TABLE]
+      : [BOOKINGS_TABLE],
     queryFn: () => api.getBookings(query) as unknown as Promise<Booking[]>,
     retry: false,
   });

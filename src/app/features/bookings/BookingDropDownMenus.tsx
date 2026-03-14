@@ -42,16 +42,20 @@ export default function BookingDropDownMenus({
 
         <DropdownMenuContent align="end">
           <DropdownMenuGroup>
-            <DropdownMenuItem className="cursor-pointer">
-              <HiEye />
-              <Link to={`/bookings/${Id}`}>See details</Link>
-            </DropdownMenuItem>
+            <Link to={`/bookings/${Id}`}>
+              <DropdownMenuItem className="cursor-pointer">
+                <HiEye />
+                See details
+              </DropdownMenuItem>
+            </Link>
 
             {Status === "UnConfirmed" && (
-              <DropdownMenuItem className="cursor-pointer">
-                <HiArrowDownOnSquare />
-                <Link to={`/checkin/${Id}`}>Check in</Link>
-              </DropdownMenuItem>
+              <Link to={`/checkin/${Id}`}>
+                <DropdownMenuItem className="cursor-pointer">
+                  <HiArrowDownOnSquare />
+                  Check in
+                </DropdownMenuItem>
+              </Link>
             )}
 
             {Status === "CheckedIn" && (

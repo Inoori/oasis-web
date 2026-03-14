@@ -1,4 +1,4 @@
-@baseUrl=https://192.168.137.216:5149
+@baseUrl=https://192.168.137.49:5149
 
 GET {{baseUrl}}/odata/cabins
 
@@ -13,7 +13,7 @@ GET {{baseUrl}}/api/cabins/1
 
 
 ###
-DELETE {{baseUrl}}/api/cabins
+# DELETE {{baseUrl}}/api/cabins
 
 
 

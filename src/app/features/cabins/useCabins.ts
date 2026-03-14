@@ -1,13 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, type Cabin } from "@/api/cabin";
 import { toast } from "react-toastify";
+import type { QueryParams } from "@/api/query";
 
 export const CABINS_TABLE = "cabins";
 
-export function useCabins() {
+export function useCabins(query: QueryParams = {}) {
   return useQuery({
-    queryKey: [CABINS_TABLE],
-    queryFn: () => api.getCabins() as unknown as Promise<Cabin[]>,
+    queryKey: query.queryKey
+      ? [...query.queryKey, CABINS_TABLE]
+      : [CABINS_TABLE],
+    queryFn: () => api.getCabins(query) as unknown as Promise<Cabin[]>,
     retry: false,
   });
 }
