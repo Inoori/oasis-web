@@ -29,8 +29,6 @@ export default function BookingTable() {
 
   if (isLoading) return <Spinner className="mx-auto size-12" />;
 
-  console.log(data);
-
   return (
     <div className={cn("rounded-md border")}>
       <Table className="font-[Sono]">
@@ -45,7 +43,7 @@ export default function BookingTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {bookings.map((booking) => (
+          {bookings?.map((booking) => (
             <BookingRow key={booking.Id} booking={booking} />
           ))}
         </TableBody>
