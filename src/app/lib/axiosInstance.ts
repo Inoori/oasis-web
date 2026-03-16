@@ -29,9 +29,9 @@ instance.interceptors.request.use(
 // 响应拦截器 - 统一处理错误、登录失效等
 instance.interceptors.response.use(
   (response) => {
-    if (response.request.responseURL.includes("odata")) {
-      return response.data.value; // 直接返回 OData 的 value 数组
-    }
+    // if (response.request.responseURL.includes("odata")) {
+    //   return response.data.value; // 直接返回 OData 的 value 数组
+    // }
     return response.data; // 其他接口直接返回 data
   },
   (error: AxiosError) => {

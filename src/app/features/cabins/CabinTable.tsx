@@ -17,7 +17,9 @@ import Empty from "@/features/cabins/Empty";
 export default function CabinTable() {
   const [searchParams] = useSearchParams();
 
-  const { data: cabins, isLoading, error } = useCabins();
+  const { data, isLoading, error } = useCabins();
+  
+  const cabins = data?.value as unknown as Cabin[]; // 直接断言为 Cabin 数组
 
   //todo: 修改为后端过滤和排序
   const filter = (searchParams.get("filter") ||

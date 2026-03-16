@@ -6,4 +6,10 @@ export interface QueryParams {
   $orderby?: string;
   $top?: number;
   $skip?: number;
+  $count?: boolean;
+}
+
+export interface ODataResponse<T> {
+  "@odata.count"?: number;
+  value: T[];
 }

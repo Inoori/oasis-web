@@ -1,5 +1,5 @@
 import { Spinner } from "@/components/ui/spinner";
-import { useBookings } from "./useBooking";
+import { useBooking, useBookings, useUpdateBookingStatus } from "./useBooking";
 import { Link, useParams } from "react-router-dom";
 import BookingBadge from "./BookingBadge";
 import { Button } from "@/components/ui/button";
@@ -7,19 +7,17 @@ import { HiArrowDownOnSquare, HiArrowLeft } from "react-icons/hi2";
 import { useMoveBack } from "@/hooks/useMoveBack";
 import BookingDataBox from "./BookingDataBox";
 import type { BookingWithRelations } from "./BookingTable";
+import { toast } from "react-toastify";
 
 export default function BookingDetail() {
-  const { id } = useParams();
-  const { data: bookings, isPending } = useBookings({
-    queryKey: [id!],
-    $filter: `Id eq ${id}`,
-    $expand:
-      "Cabin($select=Name),Guest($select=FullName,Email,CountryFlag,NationalID)",
-  });
+  const { data, isPending } = useBooking();
 
   const moveBack = useMoveBack();
 
-  const booking = bookings?.[0] as BookingWithRelations;
+  const booking = data?.value?.[0] as BookingWithRelations;
+
+  const { mutate: updateBookingStatus, isPending: isUpdating } =
+    useUpdateBookingStatus(booking?.Id as unknown as number);
 
   if (isPending) return <Spinner className="mx-auto size-12" />;
 
@@ -36,13 +34,13 @@ export default function BookingDetail() {
 
       <BookingDataBox booking={booking} />
 
-      <div className="mt-2 flex justify-end gap-3">
+      <div className="mt-4 flex justify-end gap-3">
         <Button variant="outline" onClick={moveBack}>
           <HiArrowLeft />
           Back
         </Button>
         {booking.Status === "UnConfirmed" && (
-          <Link to={`/checkin/${booking.Id}`}>
+          <Link to={`/bookings/${booking.Id}/checkin`}>
             <Button>
               <HiArrowDownOnSquare />
               Check in
@@ -51,7 +49,19 @@ export default function BookingDetail() {
         )}
 
         {booking.Status === "CheckedIn" && (
-          <Button disabled={false}>Check out</Button>
+          <Button
+            disabled={isUpdating}
+            onClick={() =>
+              updateBookingStatus("CheckedOut", {
+                onSuccess: () => {
+                  toast.success("Checked out successfully");
+                },
+              })
+            }
+          >
+            {isUpdating && <Spinner className="size-4" />}
+            Check out
+          </Button>
         )}
       </div>
     </>

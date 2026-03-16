@@ -8,6 +8,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "@/components/theme-provider";
 import BookingDetail from "@/features/bookings/BookingDetail";
+import Checkin from "./pages/Checkin";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -34,7 +35,7 @@ const App: React.FC = () => {
                 <Route path="dashboard" element={<div>Dashboard Page</div>} />
                 <Route path="/bookings" element={<Bookings />} />
                 <Route path="/bookings/:id" element={<BookingDetail />} />
-                <Route path="/checkin/:id" element={<div>Checkin Page</div>} />
+                <Route path="/bookings/:id/checkin" element={<Checkin />} />
                 <Route path="/cabins" element={<Cabins />} />
                 <Route path="/users" element={<div>Users Page</div>} />
                 <Route path="/settings" element={<div>Settings Page</div>} />

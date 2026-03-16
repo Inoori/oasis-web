@@ -25,6 +25,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useUpdateBookingStatus } from "./useBooking";
+import { toast } from "react-toastify";
 
 export default function BookingDropDownMenus({
   booking: { Id, Status },
@@ -32,6 +34,10 @@ export default function BookingDropDownMenus({
   booking: BookingWithRelations;
 }) {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState<boolean>(false);
+
+  const { mutate: updateBookingStatus, isPending } = useUpdateBookingStatus(
+    Id!
+  );
 
   return (
     <>
@@ -50,7 +56,7 @@ export default function BookingDropDownMenus({
             </Link>
 
             {Status === "UnConfirmed" && (
-              <Link to={`/checkin/${Id}`}>
+              <Link to={`/bookings/${Id}/checkin`}>
                 <DropdownMenuItem className="cursor-pointer">
                   <HiArrowDownOnSquare />
                   Check in
@@ -59,13 +65,32 @@ export default function BookingDropDownMenus({
             )}
 
             {Status === "CheckedIn" && (
-              <DropdownMenuItem className="cursor-pointer">
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={() => {
+                  updateBookingStatus("CheckedOut", {
+                    onSuccess: () => {
+                      toast.success("Booking checked out successfully");
+                    },
+                  });
+                }}
+              >
                 <HiArrowUpOnSquare />
                 <span>Check Out</span>
               </DropdownMenuItem>
             )}
+
             {Status === "CheckedOut" && (
-              <DropdownMenuItem className="cursor-pointer">
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={() => {
+                  updateBookingStatus("UnConfirmed", {
+                    onSuccess: () => {
+                      toast.success("Booking status updated to UnConfirmed");
+                    },
+                  });
+                }}
+              >
                 <HiArrowUpOnSquare />
                 <span>Unconfirm</span>
               </DropdownMenuItem>

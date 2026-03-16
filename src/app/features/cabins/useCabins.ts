@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, type Cabin } from "@/api/cabin";
 import { toast } from "react-toastify";
-import type { QueryParams } from "@/api/query";
+import type { ODataResponse, QueryParams } from "@/api/query";
 
 export const CABINS_TABLE = "cabins";
 
@@ -10,7 +10,8 @@ export function useCabins(query: QueryParams = {}) {
     queryKey: query.queryKey
       ? [...query.queryKey, CABINS_TABLE]
       : [CABINS_TABLE],
-    queryFn: () => api.getCabins(query) as unknown as Promise<Cabin[]>,
+    queryFn: () =>
+      api.getCabins(query) as unknown as Promise<ODataResponse<Cabin>>,
     retry: false,
   });
 }

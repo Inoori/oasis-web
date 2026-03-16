@@ -207,7 +207,9 @@ export default function CabinForm({ cabin, openChange, open }: CabinFormProps) {
                     },
                   }}
                   render={({ field }) => {
-                    const files = field.value as File[] | undefined;
+                    let files = field.value as File[] | undefined;
+
+                    if (typeof files === "string") files = undefined; //后端返回的 Cabin 对象中的 Image 字段是字符串，这里需要兼容一下
                     return (
                       <ImageUploader
                         // 使用受控模式：把 RHF 的值和更改回调传入
