@@ -1,4 +1,4 @@
-@baseUrl=https://192.168.137.204:5149
+@baseUrl=https://localhost:5149
 
 GET {{baseUrl}}/odata/cabins
 
@@ -31,8 +31,4 @@ GET {{baseUrl}}/odata/bookings?$count=true&$skip=0&$top=2
 
 
 ### expand booking with cabin and guest
-GET {{baseUrl}}/odata/bookings?$expand=cabin,guest&$skip=0&$top=2
-
-
-
-
+GET {{baseUrl}}/odata/bookings?$expand=cabin,guest&$skip=0&$top=2&$count=true

@@ -32,21 +32,58 @@ export function useBooking() {
 }
 
 /**
- * 更新预订状态的 Hook
+ * 入住预订的 Hook
+ * @param id 预订 ID
+ * @returns
  */
-export function useUpdateBookingStatus(id: number) {
+export function useCheckInBooking(id: number) {
   const queryClient = useQueryClient();
-
   return useMutation({
-    mutationFn: (status: Booking["Status"]) =>
-      api.updateBookingStatus(id, status),
-
+    mutationFn: () => api.checkInBooking(id),
     onSuccess: () => {
+      queryClient.removeQueries({ queryKey: [BOOKINGS_TABLE, id] });
       queryClient.invalidateQueries({ queryKey: [BOOKINGS_TABLE] });
     },
-
     onError: (error: unknown) => {
-      toast.error(`Failed to update booking status: ${error}`);
+      toast.error(`Failed to check in booking: ${error}`);
+    },
+  });
+}
+
+/**
+ * 退房预订的 Hook
+ * @param id
+ * @returns
+ */
+export function useCheckOutBooking(id: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: () => api.checkOutBooking(id),
+    onSuccess: () => {
+      queryClient.removeQueries({ queryKey: [BOOKINGS_TABLE, id] });
+      queryClient.invalidateQueries({ queryKey: [BOOKINGS_TABLE] });
+    },
+    onError: (error: unknown) => {
+      toast.error(`Failed to check out booking: ${error}`);
+    },
+  });
+}
+
+/**
+ * 取消确认预订的 Hook
+ * @param id
+ * @returns
+ */
+export function useUnConfirmBooking(id: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: () => api.unConfirmBooking(id),
+    onSuccess: () => {
+      queryClient.removeQueries({ queryKey: [BOOKINGS_TABLE, id] });
+      queryClient.invalidateQueries({ queryKey: [BOOKINGS_TABLE] });
+    },
+    onError: (error: unknown) => {
+      toast.error(`Failed to unconfirm booking: ${error}`);
     },
   });
 }

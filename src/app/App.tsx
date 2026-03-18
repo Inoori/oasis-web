@@ -56,7 +56,7 @@ const App: React.FC = () => {
         closeOnClick={false}
         rtl={false}
         pauseOnFocusLoss
-        draggable
+        // draggable
         pauseOnHover
         theme="dark"
         style={{

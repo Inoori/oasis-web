@@ -1,6 +1,6 @@
 import { useMoveBack } from "@/hooks/useMoveBack";
 import { useEffect, useState } from "react";
-import { useBooking, useUpdateBookingStatus } from "../bookings/useBooking";
+import { useBooking, useCheckInBooking } from "../bookings/useBooking";
 import type { BookingWithRelations } from "../bookings/BookingTable";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
@@ -20,8 +20,9 @@ export default function CheckinBooking() {
 
   const [confirmPaid, setConfirmPaid] = useState(booking?.IsPaid || false);
 
-  const { mutate: updateBookingStatus, isPending: isUpdating } =
-    useUpdateBookingStatus(booking?.Id as unknown as number);
+  const { mutate: checkInBooking, isPending: isUpdating } = useCheckInBooking(
+    booking?.Id as unknown as number
+  );
 
   if (!booking) return null;
 
@@ -63,7 +64,7 @@ export default function CheckinBooking() {
         <Button
           disabled={isUpdating || !confirmPaid}
           onClick={() =>
-            updateBookingStatus("CheckedIn", {
+            checkInBooking(undefined, {
               onSuccess: () => {
                 toast.success("Checked in successfully");
                 moveBack();

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { api as cabinApi } from "@/api/cabin";
-import { api as guestApi } from "@/api/guest";
+import { api as cabinApi, type Cabin } from "@/api/cabin";
+import { api as guestApi, type Guest } from "@/api/guest";
 import { api as bookingApi } from "@/api/booking";
 
 import { cabins } from "@/data/data-cabins";
@@ -13,19 +13,25 @@ import { useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import { subtractDates } from "@/lib/helps";
 import { isFuture, isPast, isToday } from "date-fns";
+import type { ODataResponse } from "@/api/query";
 
 async function createBookings() {
-  const allGuestIds = (
-    (await guestApi.getGuests({ $select: "id" })) as unknown as { Id: number }[]
-  ).map((item) => item.Id);
-  const allCabinIds = (
-    (await cabinApi.getCabins({ $select: "id" })) as unknown as { Id: number }[]
-  ).map((item) => item.Id);
+  const [guestResponse, cabinResponse] = await Promise.all([
+    guestApi.getGuests({ $select: "id" }),
+    cabinApi.getCabins({ $select: "id,RegularPrice,Discount" }),
+  ]);
 
-  const finalBookings = bookings.map((booking, index) => {
+  const guests = (guestResponse as unknown as ODataResponse<Guest>).value;
+  const cabins = (cabinResponse as unknown as ODataResponse<Cabin>).value;
+
+  const allGuestIds = guests.map((item) => item.Id);
+
+  const allCabinIds = cabins.map((item) => item.Id);
+
+  const finalBookings = bookings.map((booking, _) => {
     const cabin = cabins.at(booking.cabinID - 1);
     const numNights = subtractDates(booking.endDate, booking.startDate);
-    const cabinPrice = numNights * (cabin!.regularPrice - cabin!.discount);
+    const cabinPrice = numNights * (cabin!.RegularPrice! - cabin!.Discount!);
     const extrasPrice = booking.hasBreakfast
       ? numNights * 15 * booking.numGuests
       : 0; // hardcoded breakfast price
@@ -62,10 +68,9 @@ async function createBookings() {
     };
   });
 
-  
-  console.log(finalBookings);
+  console.info(finalBookings);
 
-  await bookingApi.createBookings(finalBookings as any[]);
+  await bookingApi.uploadBookings(finalBookings as any[]);
 }
 
 const Uploader: React.FC = () => {
@@ -80,14 +85,15 @@ const Uploader: React.FC = () => {
       await guestApi.deleteGuests();
       await cabinApi.deleteCabins();
 
-      await guestApi.createGuests(guests as any[]);
-      await cabinApi.createCabins(cabins as any[]);
+      await guestApi.uploadGuests(guests as any[]);
+      await cabinApi.uploadCabins(cabins as any[]);
       await createBookings();
 
       toast.success("upload done!");
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(`Upload failed: ${error.message}`);
+        console.error(error);
       } else {
         toast.error("Upload failed: Unknown error");
       }

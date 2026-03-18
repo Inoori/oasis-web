@@ -14,6 +14,7 @@ import type { Cabin } from "@/api/cabin";
 import type { Guest } from "@/api/guest";
 import Pagination from "@/components/Pagination";
 import { useSearchParams } from "react-router-dom";
+import Error from "../cabins/Error";
 
 export interface BookingWithRelations extends Booking {
   Cabin: Cabin;
@@ -23,7 +24,7 @@ export interface BookingWithRelations extends Booking {
 export default function BookingTable() {
   const [searchParams] = useSearchParams();
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
-  const { data, isLoading } = useBookings({
+  const { data, isLoading, error } = useBookings({
     $skip: (currentPage - 1) * 10,
     $top: 10,
     $expand: "Cabin,Guest",
@@ -34,6 +35,8 @@ export default function BookingTable() {
   const bookings = data?.value as unknown as BookingWithRelations[]; // 直接断言为包含关系的类型
 
   if (isLoading) return <Spinner className="mx-auto size-12" />;
+
+  if (error) return <Error message={error.message} />;
 
   return (
     <>

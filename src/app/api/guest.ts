@@ -11,14 +11,16 @@ export type Guest = {
 };
 
 export const api = {
-  createGuests: (guests: Guest[]) =>
-    request.post("/odata/guests/batch", guests),
-  deleteGuests: () => request.delete("/api/guests"),
-
+  
   getGuests: ({ $select, $filter }: QueryParams = {}) =>
     request.get(
       `/odata/guests${$select ? `?$select=${$select}` : ""}${$filter ? `&$filter=${$filter}` : ""}`
     ),
+
+
+  uploadGuests: (guests: Guest[]) => request.post("/api/guests/upload", guests),
+
+  deleteGuests: () => request.delete("/api/guests"),
 
   getAllGuestsIds: () => request.get("/odata/guests?$select=id"),
 };

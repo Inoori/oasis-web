@@ -1,6 +1,6 @@
 import { Spinner } from "@/components/ui/spinner";
-import { useBooking, useBookings, useUpdateBookingStatus } from "./useBooking";
-import { Link, useParams } from "react-router-dom";
+import { useBooking, useCheckOutBooking } from "./useBooking";
+import { Link } from "react-router-dom";
 import BookingBadge from "./BookingBadge";
 import { Button } from "@/components/ui/button";
 import { HiArrowDownOnSquare, HiArrowLeft } from "react-icons/hi2";
@@ -16,8 +16,9 @@ export default function BookingDetail() {
 
   const booking = data?.value?.[0] as BookingWithRelations;
 
-  const { mutate: updateBookingStatus, isPending: isUpdating } =
-    useUpdateBookingStatus(booking?.Id as unknown as number);
+  const { mutate: checkOutBooking, isPending: isUpdating } = useCheckOutBooking(
+    booking?.Id as unknown as number
+  );
 
   if (isPending) return <Spinner className="mx-auto size-12" />;
 
@@ -52,7 +53,7 @@ export default function BookingDetail() {
           <Button
             disabled={isUpdating}
             onClick={() =>
-              updateBookingStatus("CheckedOut", {
+              checkOutBooking(undefined, {
                 onSuccess: () => {
                   toast.success("Checked out successfully");
                 },

@@ -25,7 +25,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useUpdateBookingStatus } from "./useBooking";
+import { useCheckOutBooking, useUnConfirmBooking } from "./useBooking";
 import { toast } from "react-toastify";
 
 export default function BookingDropDownMenus({
@@ -35,9 +35,10 @@ export default function BookingDropDownMenus({
 }) {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState<boolean>(false);
 
-  const { mutate: updateBookingStatus, isPending } = useUpdateBookingStatus(
-    Id!
-  );
+  const { mutate: checkOutBooking, isPending: isCheckOutPending } =
+    useCheckOutBooking(Id!);
+  const { mutate: unConfirmBooking, isPending: isUnConfirmPending } =
+    useUnConfirmBooking(Id!);
 
   return (
     <>
@@ -67,8 +68,9 @@ export default function BookingDropDownMenus({
             {Status === "CheckedIn" && (
               <DropdownMenuItem
                 className="cursor-pointer"
+                disabled={isCheckOutPending}
                 onClick={() => {
-                  updateBookingStatus("CheckedOut", {
+                  checkOutBooking(undefined, {
                     onSuccess: () => {
                       toast.success("Booking checked out successfully");
                     },
@@ -83,8 +85,9 @@ export default function BookingDropDownMenus({
             {Status === "CheckedOut" && (
               <DropdownMenuItem
                 className="cursor-pointer"
+                disabled={isUnConfirmPending}
                 onClick={() => {
-                  updateBookingStatus("UnConfirmed", {
+                  unConfirmBooking(undefined, {
                     onSuccess: () => {
                       toast.success("Booking status updated to UnConfirmed");
                     },

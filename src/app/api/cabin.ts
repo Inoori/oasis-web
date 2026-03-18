@@ -21,10 +21,9 @@ export const api = {
 
   deleteCabins: () => request.delete("/api/cabins"),
 
-  createCabin: (cabin: Cabin) => request.post("/odata/cabins", cabin),
-
-  createCabins: (cabins: Cabin[]) =>
-    request.post("/odata/cabins/batch", cabins),
+  createCabin: (cabin: Cabin) => request.post("/api/cabins", cabin),
 
   updateCabin: (cabin: Cabin) => request.put(`/api/cabins/${cabin.Id}`, cabin),
+
+  uploadCabins: (cabins: Cabin[]) => request.post("/api/cabins/upload", cabins),
 };
