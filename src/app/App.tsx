@@ -19,7 +19,7 @@ const queryClient = new QueryClient({
 });
 
 const App: React.FC = () => {
-  console.log(import.meta.env);
+  if (import.meta.env.MODE === "development") console.log(import.meta.env);
 
   return (
     <QueryClientProvider client={queryClient}>

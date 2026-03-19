@@ -59,8 +59,8 @@ export default function Pagination({
             to={`?page=${currentPage - 1}`}
             disabled={!canPrevious}
             className={cn(
-              "border-0 bg-primary text-primary dark:border-0 dark:bg-black dark:hover:border dark:hover:border-[#1890ff] dark:hover:bg-black",
-              !canPrevious && "cursor-not-allowed hover:bg-black"
+              "border bg-primary-foreground text-primary hover:border-[#1890ff]",
+              !canPrevious && "cursor-not-allowed"
             )}
           />
         </PaginationItem>
@@ -74,7 +74,7 @@ export default function Pagination({
                 to={`?page=${pageNumber}`}
                 isActive={pageNumber === currentPage}
                 className={cn(
-                  "border-0 bg-primary text-primary dark:bg-black dark:hover:border dark:hover:border-[#1890ff] dark:hover:bg-black",
+                  "border bg-primary-foreground text-primary hover:border-[#1890ff]",
                   currentPage === pageNumber && "border border-[#1890ff]!"
                 )}
               >
@@ -89,9 +89,8 @@ export default function Pagination({
             to={`?page=${currentPage + 1}`}
             disabled={!canNext}
             className={cn(
-              "border-0 bg-primary text-primary dark:border-0 dark:bg-black dark:hover:border dark:hover:border-[#1890ff] dark:hover:bg-black",
-              !canNext &&
-                "cursor-not-allowed hover:text-primary dark:hover:bg-primary-foreground"
+              "border bg-primary-foreground text-primary hover:border-[#1890ff]",
+              !canNext && "cursor-not-allowed"
             )}
           />
         </PaginationItem>
