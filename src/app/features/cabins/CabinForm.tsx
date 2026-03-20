@@ -229,31 +229,6 @@ export default function CabinForm({ cabin, openChange, open }: CabinFormProps) {
   );
 }
 
-function FieldRow({
-  children,
-  label,
-  error,
-  required = false,
-}: {
-  children: React.ReactElement<{ id?: string }>;
-  label: string;
-  error: string | undefined;
-  required?: boolean;
-}) {
-  return (
-    <>
-      {children?.props?.id && (
-        <FieldLabel htmlFor={children.props.id}>
-          {label}
-          {required && <span className="text-destructive">*</span>}
-        </FieldLabel>
-      )}
-      {error && <FieldError>{error}</FieldError>}
-      {children}
-    </>
-  );
-}
-
 /**
  * 带有浮动标签的输入框，标签会根据输入框的状态（是否有值或是否聚焦）来调整位置和样式。
  * @param props
