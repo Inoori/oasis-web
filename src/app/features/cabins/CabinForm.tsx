@@ -8,24 +8,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-  FieldSet,
-} from "@/components/ui/field";
+import { Field, FieldError, FieldGroup, FieldSet } from "@/components/ui/field";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import type { Cabin } from "@/api/cabin";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import ImageUploader from "./ImageUploader";
 import { toast } from "react-toastify";
 import { useCreateOrUpdateCabin } from "./useCabins";
-import { cn } from "@/lib/utils";
-import React from "react";
 import { Label } from "@/components/ui/label";
+import FloatingLabelInput from "@/components/FloatingLabelInput";
+import validator from "validator";
 
 export type CabinFormProps = {
   open?: boolean;
@@ -73,7 +66,8 @@ export default function CabinForm({ cabin, openChange, open }: CabinFormProps) {
       open={open}
       onOpenChange={(open) => {
         if (openChange) openChange(open);
-        if (!open) reset();
+        if (!open)
+          reset(cabin ? { ...cabin, Image: undefined } : { Image: undefined }); // 关闭对话框时重置表单，并清空图片字段，避免下次打开时旧图片仍然显示
       }}
     >
       <DialogContent
@@ -113,11 +107,17 @@ export default function CabinForm({ cabin, openChange, open }: CabinFormProps) {
                   {...register("MaxCapacity", {
                     required: "Maximum capacity is required",
                     validate: (value) => {
-                      const val = Number(value);
-                      if (Number.isNaN(val))
-                        return "Maximum capacity must be a number";
-                      if (val < 1) return "Capacity must be at least 1";
-                      if (val > 10) return "Capacity cannot exceed 10";
+                      const valid = validator.isInt(
+                        value as unknown as string,
+                        {
+                          min: 1,
+                          max: 10,
+                        }
+                      );
+                      if (!valid)
+                        return "Maximum capacity must be a number between 1 and 10";
+
+                      return true;
                     },
                   })}
                 />
@@ -131,10 +131,18 @@ export default function CabinForm({ cabin, openChange, open }: CabinFormProps) {
                   {...register("RegularPrice", {
                     required: "Regular price is required",
                     validate: (value) => {
-                      const val = Number(value);
-                      if (Number.isNaN(val))
-                        return "Regular price must be a number";
-                      if (val < 0) return "Regular price cannot be negative";
+                      const valid = validator.isCurrency(
+                        value as unknown as string,
+                        {
+                          allow_negatives: false,
+                          digits_after_decimal: [1, 2],
+                        }
+                      );
+
+                      if (!valid)
+                        return "Regular price must be a valid currency amount";
+
+                      return true;
                     },
                   })}
                 />
@@ -148,16 +156,24 @@ export default function CabinForm({ cabin, openChange, open }: CabinFormProps) {
                   {...register("Discount", {
                     required: "Discount is required",
                     validate: (value) => {
+                      const valid = validator.isCurrency(
+                        value as unknown as string,
+                        {
+                          allow_negatives: false,
+                        }
+                      );
+
+                      if (!valid)
+                        return "Discount must be a valid currency amount";
                       const val = Number(value);
                       const regularPrice = Number(getValues("RegularPrice"));
 
-                      if (!value && value !== 0) return "Discount is required";
-                      if (Number.isNaN(val)) return "Discount must be a number";
-                      if (Number.isNaN(regularPrice))
-                        return "Regular price must be a number";
+                      if (isNaN(val) || isNaN(regularPrice))
+                        return "Discount and regular price must be valid numbers";
+
                       if (val > regularPrice)
                         return "Discount cannot be greater than regular price";
-                      if (val < 0) return "Discount cannot be negative";
+
                       return true;
                     },
                   })}
@@ -167,7 +183,6 @@ export default function CabinForm({ cabin, openChange, open }: CabinFormProps) {
                   label="Enter a description"
                   id="Description"
                   type="text"
-                  required
                   error={errors.Description?.message}
                 >
                   <Textarea id="Description" {...register("Description")} />
@@ -212,9 +227,7 @@ export default function CabinForm({ cabin, openChange, open }: CabinFormProps) {
 
           <DialogFooter className="pt-6">
             <DialogClose asChild>
-              <Button variant="outline" onClick={() => reset()}>
-                Cancel
-              </Button>
+              <Button variant="outline">Cancel</Button>
             </DialogClose>
             <Button type="submit" disabled={createOrUpdateMutation.isPending}>
               {createOrUpdateMutation.isPending && (
@@ -226,60 +239,5 @@ export default function CabinForm({ cabin, openChange, open }: CabinFormProps) {
         </form>
       </DialogContent>
     </Dialog>
-  );
-}
-
-/**
- * 带有浮动标签的输入框，标签会根据输入框的状态（是否有值或是否聚焦）来调整位置和样式。
- * @param props
- * @returns
- */
-function FloatingLabelInput(
-  props: React.ComponentProps<typeof Input> & {
-    label: string;
-    required?: boolean;
-    error?: string | undefined;
-    children?: React.ReactElement<{
-      placeholder?: string;
-      className?: string;
-      id?: string;
-    }>;
-  }
-) {
-  const { label, required, error, children, ...inputProps } = props;
-
-  let inputElement: React.ReactElement;
-  if (React.isValidElement(children)) {
-    const childProps = {
-      placeholder: (children.props as any).placeholder ?? " ",
-      className: cn((children.props as any).className, "peer"),
-      id: (children.props as any).id ?? inputProps.id,
-    };
-    inputElement = React.cloneElement(children, childProps);
-  } else {
-    inputElement = <Input {...inputProps} placeholder=" " className="peer" />;
-  }
-
-  return (
-    <div className="relative mt-6">
-      {inputElement}
-      {error && <FieldError className="mt-1 text-xs">{error}</FieldError>}
-      <FieldLabel
-        htmlFor={inputProps.id}
-        className={cn(
-          "pointer-events-none absolute top-0 left-2 -translate-y-6 text-xs text-muted-foreground",
-          "peer-placeholder-shown:top-0 peer-placeholder-shown:left-2 peer-placeholder-shown:translate-y-1/2 peer-placeholder-shown:text-sm peer-placeholder-shown:text-muted-foreground",
-          "peer-focus:top-0 peer-focus:-translate-y-6 peer-focus:text-xs peer-focus:text-muted-foreground",
-          "transition-all duration-200 ease-in-out"
-        )}
-      >
-        <span> {label}</span>
-        {required && (
-          <span className="relative top-0.75 inline-block align-bottom text-sm leading-0 text-destructive">
-            *
-          </span>
-        )}
-      </FieldLabel>
-    </div>
   );
 }

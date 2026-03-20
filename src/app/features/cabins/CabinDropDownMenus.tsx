@@ -4,6 +4,7 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -51,9 +52,13 @@ export default function CabinDropDownMenus({ cabin }: CabinDropDownMenusProps) {
               <HiPencil />
               <span className="ml-2">Edit</span>
             </DropdownMenuItem>
+
+            <DropdownMenuSeparator />
+
             {/* 删除 */}
             <DropdownMenuItem
               className="cursor-pointer"
+              variant="destructive"
               onClick={() => setDeleteConfirmOpen(true)}
             >
               <HiTrash />
