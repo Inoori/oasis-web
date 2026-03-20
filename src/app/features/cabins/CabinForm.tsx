@@ -23,6 +23,9 @@ import { Textarea } from "@/components/ui/textarea";
 import ImageUploader from "./ImageUploader";
 import { toast } from "react-toastify";
 import { useCreateOrUpdateCabin } from "./useCabins";
+import { cn } from "@/lib/utils";
+import React from "react";
+import { Label } from "@/components/ui/label";
 
 export type CabinFormProps = {
   open?: boolean;
@@ -86,111 +89,93 @@ export default function CabinForm({ cabin, openChange, open }: CabinFormProps) {
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-2">
           <FieldSet>
             <FieldGroup>
               <Field>
-                <FieldRow
+                <FloatingLabelInput
                   label="Cabin name"
+                  id="Name"
+                  type="text"
+                  required
                   error={errors.Name?.message}
-                  required
-                >
-                  <Input
-                    id="Name"
-                    type="text"
-                    // disabled={isPending}
-                    {...register("Name", {
-                      required: "Cabin name is required",
-                    })}
-                  />
-                </FieldRow>
+                  {...register("Name", {
+                    required: "Cabin name is required",
+                  })}
+                />
 
-                <FieldRow
+                <FloatingLabelInput
                   label="Maximum capacity"
+                  id="MaxCapacity"
+                  type="text"
+                  required
                   error={errors.MaxCapacity?.message}
-                  required
-                >
-                  <Input
-                    id="MaxCapacity"
-                    type="text"
-                    // disabled={isPending}
-                    {...register("MaxCapacity", {
-                      required: "Maximum capacity is required",
-                      validate: (value) => {
-                        const val = Number(value);
-                        if (Number.isNaN(val))
-                          return "Maximum capacity must be a number";
-                        if (val < 1) return "Capacity must be at least 1";
-                        if (val > 10) return "Capacity cannot exceed 10";
-                      },
-                    })}
-                  />
-                </FieldRow>
+                  {...register("MaxCapacity", {
+                    required: "Maximum capacity is required",
+                    validate: (value) => {
+                      const val = Number(value);
+                      if (Number.isNaN(val))
+                        return "Maximum capacity must be a number";
+                      if (val < 1) return "Capacity must be at least 1";
+                      if (val > 10) return "Capacity cannot exceed 10";
+                    },
+                  })}
+                />
 
-                <FieldRow
+                <FloatingLabelInput
                   label="Regular price"
+                  id="RegularPrice"
+                  type="text"
+                  required
                   error={errors.RegularPrice?.message}
-                  required
-                >
-                  <Input
-                    id="RegularPrice"
-                    type="text"
-                    // disabled={isPending}
-                    {...register("RegularPrice", {
-                      required: "Regular price is required",
-                      validate: (value) => {
-                        const val = Number(value);
-                        if (Number.isNaN(val))
-                          return "Regular price must be a number";
-                        if (val < 0) return "Regular price cannot be negative";
-                      },
-                    })}
-                  />
-                </FieldRow>
+                  {...register("RegularPrice", {
+                    required: "Regular price is required",
+                    validate: (value) => {
+                      const val = Number(value);
+                      if (Number.isNaN(val))
+                        return "Regular price must be a number";
+                      if (val < 0) return "Regular price cannot be negative";
+                    },
+                  })}
+                />
 
-                <FieldRow
+                <FloatingLabelInput
                   label="Discount"
-                  error={errors.Discount?.message}
+                  id="Discount"
+                  type="text"
                   required
-                >
-                  <Input
-                    id="Discount"
-                    type="text"
-                    // disabled={isPending}
-                    {...register("Discount", {
-                      required: "Discount is required",
-                      validate: (value) => {
-                        const val = Number(value);
-                        const regularPrice = Number(getValues("RegularPrice"));
+                  error={errors.Discount?.message}
+                  {...register("Discount", {
+                    required: "Discount is required",
+                    validate: (value) => {
+                      const val = Number(value);
+                      const regularPrice = Number(getValues("RegularPrice"));
 
-                        if (!value && value !== 0)
-                          return "Discount is required";
-                        if (Number.isNaN(val))
-                          return "Discount must be a number";
-                        if (Number.isNaN(regularPrice))
-                          return "Regular price must be a number";
-                        if (val > regularPrice)
-                          return "Discount cannot be greater than regular price";
-                        if (val < 0) return "Discount cannot be negative";
-                        return true;
-                      },
-                    })}
-                  />
-                </FieldRow>
+                      if (!value && value !== 0) return "Discount is required";
+                      if (Number.isNaN(val)) return "Discount must be a number";
+                      if (Number.isNaN(regularPrice))
+                        return "Regular price must be a number";
+                      if (val > regularPrice)
+                        return "Discount cannot be greater than regular price";
+                      if (val < 0) return "Discount cannot be negative";
+                      return true;
+                    },
+                  })}
+                />
 
-                <FieldRow
-                  label="Description"
+                <FloatingLabelInput
+                  label="Enter a description"
+                  id="Description"
+                  type="text"
+                  required
                   error={errors.Description?.message}
                 >
-                  <Textarea
-                    id="Description"
-                    placeholder="Enter a description"
-                    // disabled={isPending}
-                    {...register("Description")}
-                  />
-                </FieldRow>
+                  <Textarea id="Description" {...register("Description")} />
+                </FloatingLabelInput>
 
-                <FieldLabel>Cabin Image</FieldLabel>
+                <Label className="mt-3 text-muted-foreground">
+                  Cabin Image
+                </Label>
                 {errors?.Image && (
                   <FieldError>{errors.Image.message}</FieldError>
                 )}
@@ -212,6 +197,7 @@ export default function CabinForm({ cabin, openChange, open }: CabinFormProps) {
                     if (typeof files === "string") files = undefined; //后端返回的 Cabin 对象中的 Image 字段是字符串，这里需要兼容一下
                     return (
                       <ImageUploader
+                        id="Image"
                         // 使用受控模式：把 RHF 的值和更改回调传入
                         maxFiles={1}
                         value={files}
@@ -265,5 +251,60 @@ function FieldRow({
       {error && <FieldError>{error}</FieldError>}
       {children}
     </>
+  );
+}
+
+/**
+ * 带有浮动标签的输入框，标签会根据输入框的状态（是否有值或是否聚焦）来调整位置和样式。
+ * @param props
+ * @returns
+ */
+function FloatingLabelInput(
+  props: React.ComponentProps<typeof Input> & {
+    label: string;
+    required?: boolean;
+    error?: string | undefined;
+    children?: React.ReactElement<{
+      placeholder?: string;
+      className?: string;
+      id?: string;
+    }>;
+  }
+) {
+  const { label, required, error, children, ...inputProps } = props;
+
+  let inputElement: React.ReactElement;
+  if (React.isValidElement(children)) {
+    const childProps = {
+      placeholder: (children.props as any).placeholder ?? " ",
+      className: cn((children.props as any).className, "peer"),
+      id: (children.props as any).id ?? inputProps.id,
+    };
+    inputElement = React.cloneElement(children, childProps);
+  } else {
+    inputElement = <Input {...inputProps} placeholder=" " className="peer" />;
+  }
+
+  return (
+    <div className="relative mt-6">
+      {inputElement}
+      {error && <FieldError className="mt-1 text-xs">{error}</FieldError>}
+      <FieldLabel
+        htmlFor={inputProps.id}
+        className={cn(
+          "pointer-events-none absolute top-0 left-2 -translate-y-6 text-xs text-muted-foreground",
+          "peer-placeholder-shown:top-0 peer-placeholder-shown:left-2 peer-placeholder-shown:translate-y-1/2 peer-placeholder-shown:text-sm peer-placeholder-shown:text-muted-foreground",
+          "peer-focus:top-0 peer-focus:-translate-y-6 peer-focus:text-xs peer-focus:text-muted-foreground",
+          "transition-all duration-200 ease-in-out"
+        )}
+      >
+        <span> {label}</span>
+        {required && (
+          <span className="relative top-0.75 inline-block align-bottom text-sm leading-0 text-destructive">
+            *
+          </span>
+        )}
+      </FieldLabel>
+    </div>
   );
 }
