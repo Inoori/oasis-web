@@ -23,9 +23,9 @@ export default function DashboardLayout() {
     <>
       <div
         className={cn(
-          "grid min-w-120 grid-cols-2 grid-rows-[auto_auto_22rem_auto] gap-4",
-          "md:grid-cols-2 md:grid-rows-[auto_auto_22rem_auto] md:gap-4",
-          "xl:min-w-6xl xl:grid-cols-4 xl:grid-rows-[auto_22rem_auto] xl:gap-6"
+          "grid min-w-120 grid-cols-2 grid-rows-[auto_auto_26rem_26rem_auto] gap-4",
+          "md:grid-cols-2 md:grid-rows-[auto_auto_26rem_26rem_auto] md:gap-4",
+          "xl:min-w-6xl xl:grid-cols-4 xl:grid-rows-[auto_26rem_auto] xl:gap-6"
         )}
       >
         <Stats

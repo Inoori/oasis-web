@@ -8,6 +8,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
+import { cn } from "@/lib/utils";
 type DurationChartProps = {
   confirmedStays: BookingWithRelations[];
 };
@@ -142,9 +143,17 @@ export default function DurationChart({ confirmedStays }: DurationChartProps) {
   const data = prepareData(startData, confirmedStays);
 
   return (
-    <div className="col-span-2 col-start-3 min-w-lg rounded-md bg-accent px-8 py-6">
-      <h2 className="text-2xl font-semibold">Stay duration summary</h2>
-      <ChartContainer config={chartConfig}>
+    <div
+      className={cn(
+        "col-span-2 flex flex-col items-center justify-center rounded-md bg-accent px-8 py-6",
+        "md:col-span-2 md:col-start-1",
+        "xl:col-span-2 xl:col-start-3"
+      )}
+    >
+      <h2 className="self-start text-2xl font-semibold">
+        Stay duration summary
+      </h2>
+      <ChartContainer config={chartConfig} className="h-full">
         <PieChart>
           <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
           <Pie
