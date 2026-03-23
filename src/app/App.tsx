@@ -9,6 +9,7 @@ import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "@/components/theme-provider";
 import BookingDetail from "@/features/bookings/BookingDetail";
 import Checkin from "./pages/Checkin";
+import PageNotFound from "./pages/PageNotFound";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -43,7 +44,7 @@ const App: React.FC = () => {
               </Route>
 
               <Route path="/login" element={<div>Login Page</div>} />
-              <Route path="*" element={<div>404 Not Found</div>} />
+              <Route path="*" element={<PageNotFound />} />
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
