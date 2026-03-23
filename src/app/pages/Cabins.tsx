@@ -6,7 +6,7 @@ import CabinTableOperations from "@/features/cabins/CabinTableOperations";
 export default function Cabins() {
   return (
     <>
-      <h1 className="text-3xl">All Cabins</h1>
+      <h1 className="text-3xl font-bold">All Cabins</h1>
 
       <Pannel className="mt-6">
         <CabinTableOperations />

@@ -5,7 +5,7 @@ import BookingTableOperations from "@/features/bookings/BookingTableOperations";
 export default function Bookings() {
   return (
     <>
-      <h1 className="text-3xl">All Bookings</h1>
+      <h1 className="text-3xl font-bold">All Bookings</h1>
 
       <Pannel className="mt-6">
         <BookingTableOperations />

@@ -10,6 +10,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import BookingDetail from "@/features/bookings/BookingDetail";
 import Checkin from "./pages/Checkin";
 import PageNotFound from "./pages/PageNotFound";
+import Dashboard from "./pages/Dashboard";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,7 +34,7 @@ const App: React.FC = () => {
             <Routes>
               <Route element={<Layout />}>
                 <Route index element={<Navigate replace to="/dashboard" />} />
-                <Route path="dashboard" element={<div>Dashboard Page</div>} />
+                <Route path="dashboard" element={<Dashboard />} />
                 <Route path="/bookings" element={<Bookings />} />
                 <Route path="/bookings/:id" element={<BookingDetail />} />
                 <Route path="/bookings/:id/checkin" element={<Checkin />} />
