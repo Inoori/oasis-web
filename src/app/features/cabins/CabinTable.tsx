@@ -13,12 +13,13 @@ import { useCabins } from "@/features/cabins/useCabins";
 import Error from "@/features/cabins/Error";
 import { Spinner } from "@/components/ui/spinner";
 import Empty from "@/features/cabins/Empty";
+import _ from "lodash";
 
 export default function CabinTable() {
   const [searchParams] = useSearchParams();
 
   const { data, isLoading, error } = useCabins();
-  
+
   const cabins = data?.value as unknown as Cabin[]; // 直接断言为 Cabin 数组
 
   //todo: 修改为后端过滤和排序
@@ -29,7 +30,7 @@ export default function CabinTable() {
     "name-asc") as keyof typeof sortMap;
 
   const filterMap = {
-    all: (cabins: Cabin[]) => cabins,
+    all: (cabins: Cabin[]) => [...cabins],
     "no-discount": (cabins: Cabin[]) =>
       cabins.filter((cabin) => cabin.Discount === 0),
     "with-discount": (cabins: Cabin[]) =>

@@ -1,6 +1,6 @@
 import Filter from "@/components/Filter";
-import SortBy from "../../components/SortBy";
 import CabinOperations from "./CabinOperations";
+import SortBy from "@/components/SortBy";
 
 export default function CabinTableOperations() {
   return (
