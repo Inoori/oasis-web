@@ -102,6 +102,26 @@ const Uploader: React.FC = () => {
     }
   }
 
+  async function uploadBookings() {
+    try {
+      setIsLoading(true);
+      await bookingApi.deleteBookings();
+      await createBookings();
+      setIsLoading(false);
+
+      toast.success("Bookings upload done!");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(`Upload failed: ${error.message}`);
+        console.error(error);
+      } else {
+        toast.error("Upload failed: Unknown error");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
     <Pannel
       className={cn(
@@ -121,7 +141,7 @@ const Uploader: React.FC = () => {
       </Button>
 
       <Button
-        onClick={() => {}}
+        onClick={uploadBookings}
         disabled={isLoading}
         variant={"outline"}
         className="cursor-pointer rounded-full transition-all duration-200"
