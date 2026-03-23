@@ -26,8 +26,6 @@ export default function BookingTableOperations() {
           ]}
         />
       </div>
-
-      {/* <CabinOperations /> */}
     </div>
   );
 }
