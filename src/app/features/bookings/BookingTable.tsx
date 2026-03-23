@@ -23,13 +23,19 @@ export interface BookingWithRelations extends Booking {
 
 export default function BookingTable() {
   const [searchParams] = useSearchParams();
+
+  const status = searchParams.get("Status");
+  const sort = searchParams.get("sort");
+
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
   const { data, isLoading, error } = useBookings({
+    queryKey: ["page", currentPage, "status", status, "sort", sort],
     $skip: (currentPage - 1) * 10,
     $top: 10,
     $expand: "Cabin,Guest",
     $count: true,
-    queryKey: ["page", currentPage],
+    $filter: status ? `Status eq '${status}'` : undefined,
+    $orderby: sort ? sort : undefined,
   });
 
   const bookings = data?.value as unknown as BookingWithRelations[]; // 直接断言为包含关系的类型

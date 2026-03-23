@@ -51,12 +51,18 @@ export default function Pagination({
 
   const canNext = currentPage < totalPages;
 
+  function buildPageSearch(page: number) {
+    const param = new URLSearchParams(searchParams);
+    param.set("page", page.toString());
+    return `?${param.toString()}`;
+  }
+
   return (
     <PaginationRoot className={className}>
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
-            to={`?page=${currentPage - 1}`}
+            to={buildPageSearch(currentPage - 1)}
             disabled={!canPrevious}
             className={cn(
               "border bg-primary-foreground text-primary hover:border-[#1890ff]",
@@ -71,7 +77,7 @@ export default function Pagination({
               <PaginationEllipsis />
             ) : (
               <PaginationLink
-                to={`?page=${pageNumber}`}
+                to={buildPageSearch(pageNumber)}
                 isActive={pageNumber === currentPage}
                 className={cn(
                   "border bg-primary-foreground text-primary hover:border-[#1890ff]",
@@ -86,7 +92,7 @@ export default function Pagination({
 
         <PaginationItem>
           <PaginationNext
-            to={`?page=${currentPage + 1}`}
+            to={buildPageSearch(currentPage + 1)}
             disabled={!canNext}
             className={cn(
               "border bg-primary-foreground text-primary hover:border-[#1890ff]",

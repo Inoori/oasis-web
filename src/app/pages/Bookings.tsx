@@ -1,5 +1,6 @@
 import Pannel from "@/components/Pannel";
 import BookingTable from "@/features/bookings/BookingTable";
+import BookingTableOperations from "@/features/bookings/BookingTableOperations";
 
 export default function Bookings() {
   return (
@@ -7,12 +8,8 @@ export default function Bookings() {
       <h1 className="text-3xl">All Bookings</h1>
 
       <Pannel className="mt-6">
-        {/* <CabinTableOperations /> */}
+        <BookingTableOperations />
         <BookingTable />
-
-        {/* <div className="bg-background pt-12">
-            <Pagination dataLength={500} />
-          </div> */}
       </Pannel>
     </>
   );

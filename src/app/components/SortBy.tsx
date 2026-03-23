@@ -26,7 +26,7 @@ export default function SortBy({
         setSearchParams(searchParams);
       }}
     >
-      <SelectTrigger className="w-full max-w-48">
+      <SelectTrigger className="w-full">
         <SelectValue placeholder="Sort By" />
       </SelectTrigger>
       <SelectContent>
