@@ -7,7 +7,11 @@ import TodayActivity from "../check-in-out/TodayActivity";
 import { cn } from "@/lib/utils";
 import DurationChart from "./DurationChart";
 
+
 export default function DashboardLayout() {
+
+// const { } =useDashboardQuery()
+
   const { data: bookingResponse, isPending } = useRecentBookings();
 
   const { confirmStays, numDays, isPending: isStaysPending } = useRecentStays();
@@ -15,7 +19,7 @@ export default function DashboardLayout() {
   const { data: cabins, isPending: isCabinsPending } = useCabins();
 
   if (isPending || isStaysPending || isCabinsPending)
-    return <Spinner className="size-4" />;
+    return <Spinner className="mx-auto size-12" />;
 
   const bookings = bookingResponse?.value || [];
 

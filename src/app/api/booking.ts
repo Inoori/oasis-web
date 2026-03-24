@@ -3,7 +3,7 @@ import type { QueryParams } from "./query";
 import { getToday } from "@/lib/helps";
 
 export type Booking = {
-  Id?: number;
+  Id?: bigint;
   CreatedAt?: string;
   StartDate?: string;
   EndDate?: string;
@@ -16,8 +16,8 @@ export type Booking = {
   HasBreakfast?: boolean;
   IsPaid?: boolean;
   Observations?: string;
-  CabinID?: number;
-  GuestID?: number;
+  CabinID?: bigint;
+  GuestID?: bigint;
 };
 
 export const api = {
@@ -39,11 +39,11 @@ export const api = {
 
   deleteBookings: () => request.delete("/api/bookings"),
 
-  checkInBooking: (id: number) => request.post(`/api/bookings/${id}/checkin`),
+  checkInBooking: (id: bigint) => request.post(`/api/bookings/${id}/checkin`),
 
-  checkOutBooking: (id: number) => request.post(`/api/bookings/${id}/checkout`),
+  checkOutBooking: (id: bigint) => request.post(`/api/bookings/${id}/checkout`),
 
-  unConfirmBooking: (id: number) =>
+  unConfirmBooking: (id: bigint) =>
     request.post(`/api/bookings/${id}/unconfirm`),
 
   getBookingsAfterDate: (date: string) =>

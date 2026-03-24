@@ -58,7 +58,7 @@ export function useBookingSuspense() {
  * @param id 预订 ID
  * @returns
  */
-export function useCheckInBooking(id: number) {
+export function useCheckInBooking(id: bigint) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: () => api.checkInBooking(id),
@@ -81,7 +81,7 @@ export function useCheckInBooking(id: number) {
  * @param id
  * @returns
  */
-export function useCheckOutBooking(id: number) {
+export function useCheckOutBooking(id: bigint) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: () => api.checkOutBooking(id),
@@ -104,7 +104,7 @@ export function useCheckOutBooking(id: number) {
  * @param id
  * @returns
  */
-export function useUnConfirmBooking(id: number) {
+export function useUnConfirmBooking(id: bigint) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: () => api.unConfirmBooking(id),

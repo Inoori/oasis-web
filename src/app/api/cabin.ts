@@ -2,7 +2,7 @@ import request from "@/lib/axiosInstance"; // 上面创建的实例
 import type { QueryParams } from "./query";
 
 export type Cabin = {
-  Id?: number;
+  Id?: bigint;
   Name?: string;
   MaxCapacity?: number;
   RegularPrice?: number;
@@ -17,7 +17,7 @@ export const api = {
       `/odata/cabins${$select ? `?$select=${$select}` : ""}${$filter ? `&$filter=${$filter}` : ""}`
     ),
 
-  deleteCabin: (id: number) => request.delete(`/api/cabins/${id}`),
+  deleteCabin: (id: bigint) => request.delete(`/api/cabins/${id}`),
 
   deleteCabins: () => request.delete("/api/cabins"),
 

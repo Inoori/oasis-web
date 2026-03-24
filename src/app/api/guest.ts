@@ -2,7 +2,7 @@ import request from "@/lib/axiosInstance"; // 上面创建的实例
 import type { QueryParams } from "./query";
 
 export type Guest = {
-  Id?: number;
+  Id?: bigint;
   FullName?: string;
   Email?: string;
   Nationality?: string;
@@ -22,5 +22,5 @@ export const api = {
 
   deleteGuests: () => request.delete("/api/guests"),
 
-  getAllGuestsIds: () => request.get("/odata/guests?$select=id"),
+  getAllGuestsIds: () => request.get("/odata/guests?$select=Id"),
 };
