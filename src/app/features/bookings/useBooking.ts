@@ -3,6 +3,8 @@ import { api, type Booking } from "@/api/booking";
 import { toast } from "react-toastify";
 import type { ODataResponse, QueryParams } from "@/api/query";
 import { useParams } from "react-router-dom";
+import { errorHandle } from "@/lib/errorHandle";
+import { TODAY_ACTIVITY_KEY } from "@/features/check-in-out/useTodayActivity";
 
 export const BOOKINGS_TABLE = "bookings";
 
@@ -43,10 +45,14 @@ export function useCheckInBooking(id: number) {
     onSuccess: () => {
       queryClient.removeQueries({ queryKey: [BOOKINGS_TABLE, id] });
       queryClient.invalidateQueries({ queryKey: [BOOKINGS_TABLE] });
+      queryClient.invalidateQueries({
+        queryKey: [TODAY_ACTIVITY_KEY],
+      });
     },
-    onError: (error: unknown) => {
-      toast.error(`Failed to check in booking: ${error}`);
-    },
+    onError: (error: unknown) =>
+      errorHandle(error, () => {
+        toast.error(`Failed to check in booking: ${error}`);
+      }),
   });
 }
 
@@ -62,10 +68,14 @@ export function useCheckOutBooking(id: number) {
     onSuccess: () => {
       queryClient.removeQueries({ queryKey: [BOOKINGS_TABLE, id] });
       queryClient.invalidateQueries({ queryKey: [BOOKINGS_TABLE] });
+      queryClient.invalidateQueries({
+        queryKey: [TODAY_ACTIVITY_KEY],
+      });
     },
-    onError: (error: unknown) => {
-      toast.error(`Failed to check out booking: ${error}`);
-    },
+    onError: (error: unknown) =>
+      errorHandle(error, () => {
+        toast.error(`Failed to check out booking: ${error}`);
+      }),
   });
 }
 
@@ -81,9 +91,13 @@ export function useUnConfirmBooking(id: number) {
     onSuccess: () => {
       queryClient.removeQueries({ queryKey: [BOOKINGS_TABLE, id] });
       queryClient.invalidateQueries({ queryKey: [BOOKINGS_TABLE] });
+      queryClient.invalidateQueries({
+        queryKey: [TODAY_ACTIVITY_KEY],
+      });
     },
-    onError: (error: unknown) => {
-      toast.error(`Failed to unconfirm booking: ${error}`);
-    },
+    onError: (error: unknown) =>
+      errorHandle(error, () => {
+        toast.error(`Failed to unconfirm booking: ${error}`);
+      }),
   });
 }

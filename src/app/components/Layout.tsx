@@ -22,7 +22,7 @@ export default function Layout() {
             id="container"
             className="grid flex-1 grid-cols-[0.5fr_3fr_0.7fr] py-24"
           >
-            <main className="col-start-2 flex flex-col">
+            <main className="relative col-start-2 flex flex-col">
               <Outlet />
             </main>
           </div>

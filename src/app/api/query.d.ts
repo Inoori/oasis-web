@@ -13,3 +13,10 @@ export interface ODataResponse<T> {
   "@odata.count"?: number;
   value: T[];
 }
+
+export type ProblemDetails = {
+  status: number;
+  title?: string;
+  detail?: string;
+  instance?: string;
+};
