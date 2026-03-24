@@ -1,6 +1,6 @@
 import { useMoveBack } from "@/hooks/useMoveBack";
-import { useEffect, useState } from "react";
-import { useBooking, useCheckInBooking } from "../bookings/useBooking";
+import { useState } from "react";
+import { useBookingSuspense, useCheckInBooking } from "../bookings/useBooking";
 import type { BookingWithRelations } from "../bookings/BookingTable";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
@@ -14,21 +14,17 @@ import { toast } from "react-toastify";
 export default function CheckinBooking() {
   const moveBack = useMoveBack();
 
-  const { data, isPending } = useBooking();
+  const { data } = useBookingSuspense();
 
-  const booking = data?.value?.[0] as BookingWithRelations;
+  const booking = data.value[0] as BookingWithRelations;
 
-  const [confirmPaid, setConfirmPaid] = useState(booking?.IsPaid || false);
+  const [confirmPaid, setConfirmPaid] = useState(booking.IsPaid);
 
   const { mutate: checkInBooking, isPending: isUpdating } = useCheckInBooking(
-    booking?.Id as unknown as number
+    booking.Id!
   );
 
-  if (!booking) return null;
-
   const { Id: bookingId, Guest, TotalPrice } = booking;
-
-  if (isPending) return <Spinner className="mx-auto size-12" />;
 
   return (
     <>
@@ -40,7 +36,7 @@ export default function CheckinBooking() {
         <Checkbox
           id="confirmPaid"
           name="confirmPaid"
-          disabled={booking?.IsPaid}
+          disabled={booking.IsPaid}
           className="size-5 data-[state=checked]:bg-indigo-500"
           checked={confirmPaid}
           onCheckedChange={(checked) => setConfirmPaid(checked === true)}

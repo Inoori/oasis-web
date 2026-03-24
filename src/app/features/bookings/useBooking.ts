@@ -1,4 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { api, type Booking } from "@/api/booking";
 import { toast } from "react-toastify";
 import type { ODataResponse, QueryParams } from "@/api/query";
@@ -30,6 +35,21 @@ export function useBooking() {
     $filter: `Id eq ${id}`,
     $expand:
       "Cabin($select=Name),Guest($select=FullName,Email,CountryFlag,NationalID)",
+  });
+}
+
+export function useBookingSuspense() {
+  const { id } = useParams();
+  if (!id) throw new Error("Booking ID is required");
+
+  return useSuspenseQuery({
+    queryKey: [BOOKINGS_TABLE, id],
+    queryFn: () =>
+      api.getBookings({
+        $filter: `Id eq ${id}`,
+        $expand:
+          "Cabin($select=Name),Guest($select=FullName,Email,CountryFlag,NationalID)",
+      }) as unknown as Promise<ODataResponse<Booking>>,
   });
 }
 
