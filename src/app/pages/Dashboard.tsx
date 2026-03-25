@@ -1,9 +1,6 @@
 import DashboardFilter from "@/features/dashboard/DashboardFilter";
 import DashboardLayout from "@/features/dashboard/DashboardLayout";
-import { Suspense } from "react";
-import { ErrorBoundary } from "react-error-boundary";
-import ErrorPage from "@/pages/ErrorPage";
-import { Spinner } from "@/components/ui/spinner";
+import AsyncBoundary from "@/components/AsyncBoundary";
 
 export default function Dashboard() {
   return (
@@ -12,11 +9,9 @@ export default function Dashboard() {
         <h1 className="text-3xl font-bold">Dashboard</h1>
         <DashboardFilter />
       </div>
-      <Suspense fallback={<Spinner className="mx-auto size-12" />}>
-        <ErrorBoundary FallbackComponent={ErrorPage}>
-          <DashboardLayout />
-        </ErrorBoundary>
-      </Suspense>
+      <AsyncBoundary>
+        <DashboardLayout />
+      </AsyncBoundary>
     </div>
   );
 }

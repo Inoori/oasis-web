@@ -12,9 +12,16 @@ export type Cabin = {
 };
 
 export const api = {
-  getCabins: ({ $select, $filter }: QueryParams = {}) =>
+  getCabins: ({
+    $select,
+    $filter,
+    $count,
+    $skip = 0,
+    $top,
+    $orderby,
+  }: QueryParams = {}) =>
     request.get(
-      `/odata/cabins${$select ? `?$select=${$select}` : ""}${$filter ? `&$filter=${$filter}` : ""}`
+      `/odata/cabins?$skip=${$skip}${$select ? `&$select=${$select}` : ""}${$filter ? `&$filter=${$filter}` : ""}${$orderby ? `&$orderby=${$orderby}` : ""}${$top === null || $top === undefined ? "" : `&$top=${$top}`}${$count ? `&$count=${$count}` : ""}`
     ),
 
   deleteCabin: (id: bigint) => request.delete(`/api/cabins/${id}`),

@@ -71,7 +71,7 @@ export function useDeleteCabin() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (cabinId: number) => api.deleteCabin(cabinId),
+    mutationFn: (cabinId: bigint) => api.deleteCabin(cabinId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [CABINS_TABLE] });
     },
@@ -85,8 +85,8 @@ export function useOptimisticDeleteCabin() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (cabinId: number) => api.deleteCabin(cabinId),
-    onMutate: async (cabinId: number) => {
+    mutationFn: (cabinId: bigint) => api.deleteCabin(cabinId),
+    onMutate: async (cabinId: bigint) => {
       await queryClient.cancelQueries({ queryKey: [CABINS_TABLE] });
       const previousCabins = queryClient.getQueryData([CABINS_TABLE]);
       queryClient.setQueryData([CABINS_TABLE], (old: any) => {

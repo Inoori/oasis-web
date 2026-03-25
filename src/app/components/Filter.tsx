@@ -1,6 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
+import { useState, useTransition } from "react";
 
 export interface FilterOption {
   label?: string;
@@ -14,16 +15,18 @@ export interface FilterProps {
 
 export default function Filter({ searchParamName, options = [] }: FilterProps) {
   const [searchParams, setSearchParams] = useSearchParams();
-  if (!options || options.length === 0) return null;
-
   const currentFilter =
     searchParams.get(searchParamName) || options?.at(0)?.value;
+  const [selectValue, setSelectValue] = useState<string>(currentFilter || "");
+
+  if (!options || options.length === 0) return null;
 
   function handleClick(value: string) {
     if (value === currentFilter) return;
     searchParams.set(searchParamName, value);
     if (searchParams.has("page")) searchParams.set("page", "1");
     if (value?.toLowerCase() === "all") searchParams.delete(searchParamName);
+    setSelectValue(value);
     setSearchParams(searchParams);
   }
 
@@ -35,7 +38,7 @@ export default function Filter({ searchParamName, options = [] }: FilterProps) {
           onClick={() => handleClick(option.value)}
           variant="outline"
           className={cn(
-            option.value === currentFilter &&
+            option.value === selectValue &&
               "bg-primary! text-primary-foreground!",
             "transition-colors duration-200"
           )}

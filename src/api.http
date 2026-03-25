@@ -4,7 +4,7 @@ GET {{baseUrl}}/odata/cabins
 
 
 ### 获取所有cabin id
-GET {{baseUrl}}/odata/cabins?$select=id
+GET {{baseUrl}}/odata/cabins?$count=true&$top=0
 
 ###
 GET {{baseUrl}}/api/cabins/1
