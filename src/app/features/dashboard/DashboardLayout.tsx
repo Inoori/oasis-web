@@ -7,7 +7,8 @@ import AsyncBoundary from "@/components/AsyncBoundary";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Spinner } from "@/components/ui/spinner";
 import { useIsFetching } from "@tanstack/react-query";
-import { AnimatePresence, LayoutGroup, motion } from "motion/react";
+import { LayoutGroup, motion } from "motion/react";
+import SalesChart from "./SalesChart";
 export default function DashboardLayout() {
   const [recentBookingResponse, recentStaysResponse, cabinsResponse] =
     useDashboardQuery();
@@ -69,8 +70,7 @@ export default function DashboardLayout() {
           </AsyncBoundary>
 
           <DurationChart confirmedStays={confirmStays} />
-          {/* Todo */}
-          {/* <SalesChart/> */}
+          <SalesChart bookings={bookings} numDays={numDays} />
         </motion.div>
       </motion.div>
     </LayoutGroup>
