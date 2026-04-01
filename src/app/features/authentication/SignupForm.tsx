@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 import { Label } from "@/components/ui/label";
 import FloatingLabelInput from "@/components/FloatingLabelInput";
 import validator from "validator";
-import type { User } from "@/api/user";
 import { Card } from "@/components/ui/card";
 
 export type SignupFormValues = {
@@ -47,9 +46,10 @@ export default function SignupForm() {
           <FieldGroup>
             <Field>
               <FloatingLabelInput
-                label="Full Name"
+                label="User Name"
                 id="UserName"
                 type="text"
+                autoComplete="username"
                 required
                 error={errors.UserName?.message}
                 {...register("UserName", {
@@ -60,7 +60,7 @@ export default function SignupForm() {
               <FloatingLabelInput
                 label="Email Address"
                 id="Email"
-                type="email"
+                type="text"
                 required
                 error={errors.Email?.message}
                 {...register("Email", {
@@ -75,6 +75,7 @@ export default function SignupForm() {
                 label="Password"
                 id="Password"
                 type="password"
+                autoComplete="new-password"
                 required
                 error={errors.Password?.message}
                 {...register("Password", {
@@ -90,6 +91,7 @@ export default function SignupForm() {
                 label="Confirm Password"
                 id="ConfirmPassword"
                 type="password"
+                autoComplete="new-password"
                 required
                 error={errors.ConfirmPassword?.message}
                 {...register("ConfirmPassword", {

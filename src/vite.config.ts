@@ -3,10 +3,12 @@ import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
+import mkcert from "vite-plugin-mkcert";
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
+    mkcert(),
     react({
       babel: {
         plugins: [
@@ -27,19 +29,7 @@ export default defineConfig({
     },
   },
 
-  // server: {
-  //   proxy: {
-  //     "/api": {
-  //       target: "https://localhost:5149",
-  //       changeOrigin: true,
-  //       secure: false,
-  //     },
-  //     //代理odata 格式请求
-  //     "/odata": {
-  //       target: "https://localhost:5149",
-  //       changeOrigin: true,
-  //       secure: false,
-  //     },
-  //   },
-  // },
+  server: {
+    https: {},
+  },
 });

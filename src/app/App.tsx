@@ -12,6 +12,8 @@ import Checkin from "./pages/Checkin";
 import PageNotFound from "./pages/PageNotFound";
 import Dashboard from "./pages/Dashboard";
 import NewUsers from "./pages/Users";
+import Login from "./pages/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,7 +35,13 @@ const App: React.FC = () => {
         <TooltipProvider>
           <BrowserRouter>
             <Routes>
-              <Route element={<Layout />}>
+              <Route
+                element={
+                  <ProtectedRoute>
+                    <Layout />
+                  </ProtectedRoute>
+                }
+              >
                 <Route index element={<Navigate replace to="/dashboard" />} />
                 <Route path="dashboard" element={<Dashboard />} />
                 <Route path="/bookings" element={<Bookings />} />
@@ -45,7 +53,7 @@ const App: React.FC = () => {
                 <Route path="/account" element={<div>Account Page</div>} />
               </Route>
 
-              <Route path="/login" element={<div>Login Page</div>} />
+              <Route path="/login" element={<Login />} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </BrowserRouter>

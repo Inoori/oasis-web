@@ -12,6 +12,7 @@ import Logo from "@/components/Logo";
 import SiderbarNavItems from "@/components/SiderbarNavItems";
 import { cn } from "@/lib/utils";
 import Uploader from "@/data/Uploader";
+import LogoSmall from "./LogoSmall";
 
 export default function AppSidebar() {
   const { open } = useSidebar();
@@ -22,7 +23,7 @@ export default function AppSidebar() {
       className="items-center justify-center duration-100"
     >
       <SidebarHeader className="transition-all duration-300">
-        <Logo />
+        {open ? <Logo /> : <LogoSmall />}
       </SidebarHeader>
       <SidebarGroup>
         <SidebarContent

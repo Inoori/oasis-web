@@ -66,9 +66,9 @@ export function useCheckInBooking(id: bigint) {
       queryClient.invalidateQueries({ queryKey: [BOOKINGS_TABLE] });
     },
     onError: (error: unknown) =>
-      errorHandle(error, () => {
-        toast.error(`Failed to check in booking: ${error}`);
-      }),
+      errorHandle(error)
+        ? undefined
+        : toast.error(`Failed to check in booking: ${error}`),
   });
 }
 
@@ -86,9 +86,9 @@ export function useCheckOutBooking(id: bigint) {
       queryClient.invalidateQueries({ queryKey: [BOOKINGS_TABLE] });
     },
     onError: (error: unknown) =>
-      errorHandle(error, () => {
-        toast.error(`Failed to check out booking: ${error}`);
-      }),
+      errorHandle(error)
+        ? undefined
+        : toast.error(`Failed to check out booking: ${error}`),
   });
 }
 
@@ -106,8 +106,8 @@ export function useUnConfirmBooking(id: bigint) {
       queryClient.invalidateQueries({ queryKey: [BOOKINGS_TABLE] });
     },
     onError: (error: unknown) =>
-      errorHandle(error, () => {
-        toast.error(`Failed to unconfirm booking: ${error}`);
-      }),
+      errorHandle(error)
+        ? undefined
+        : toast.error(`Failed to unconfirm booking: ${error}`),
   });
 }
