@@ -14,6 +14,7 @@ import Dashboard from "./pages/Dashboard";
 import NewUsers from "./pages/Users";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -50,7 +51,7 @@ const App: React.FC = () => {
                 <Route path="/cabins" element={<Cabins />} />
                 <Route path="/users" element={<NewUsers />} />
                 <Route path="/settings" element={<div>Settings Page</div>} />
-                <Route path="/account" element={<div>Account Page</div>} />
+                <Route path="/profile" element={<Profile />} />
               </Route>
 
               <Route path="/login" element={<Login />} />

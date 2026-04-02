@@ -1,30 +1,22 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export type AuthUser = {
-  id: string;
-  name: string;
-  email: string;
-};
-
 export type AuthState = {
   isAuthenticated: boolean;
   AccessToken?: string;
   AccessTokenExpiresAt?: Date;
   RefreshToken?: string;
   RefreshTokenExpiresAt?: Date;
-  user?: AuthUser;
 
   // actions
   login: (payload: {
     accessToken: string;
     refreshToken: string;
-    user: AuthUser;
     accessTokenExpiresAtUtc: Date;
     refreshTokenExpiresAtUtc: Date;
   }) => void;
 
-  refreshToken: (payload: {
+  setToken: (payload: {
     accessToken: string;
     accessTokenExpiresAtUtc: Date;
     refreshToken: string;
@@ -32,8 +24,6 @@ export type AuthState = {
   }) => void;
 
   logout: () => void;
-
-  setUser: (user: AuthUser) => void;
 };
 
 const REFRESH_TOKEN_KEY = "oasis-refreshToken";
@@ -46,14 +36,12 @@ export const useAuthStore = create<AuthState>()(
       AccessTokenExpiresAt: undefined,
       RefreshToken: undefined,
       RefreshTokenExpiresAt: undefined,
-      user: undefined,
 
       login: ({
         accessToken,
         accessTokenExpiresAtUtc,
         refreshToken,
         refreshTokenExpiresAtUtc,
-        user,
       }) => {
         // localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
         set({
@@ -62,11 +50,10 @@ export const useAuthStore = create<AuthState>()(
           RefreshToken: refreshToken,
           AccessTokenExpiresAt: accessTokenExpiresAtUtc,
           RefreshTokenExpiresAt: refreshTokenExpiresAtUtc,
-          user,
         });
       },
 
-      refreshToken: ({
+      setToken: ({
         accessToken,
         accessTokenExpiresAtUtc,
         refreshToken,
@@ -74,6 +61,7 @@ export const useAuthStore = create<AuthState>()(
       }) => {
         // localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
         set({
+          isAuthenticated: true,
           AccessToken: accessToken,
           AccessTokenExpiresAt: accessTokenExpiresAtUtc,
           RefreshToken: refreshToken,
@@ -89,12 +77,7 @@ export const useAuthStore = create<AuthState>()(
           RefreshToken: undefined,
           AccessTokenExpiresAt: undefined,
           RefreshTokenExpiresAt: undefined,
-          user: undefined,
         });
-      },
-
-      setUser: (user) => {
-        set({ user });
       },
     }),
     {
@@ -108,7 +91,7 @@ export const useAuthStore = create<AuthState>()(
         return {
           ...currentState,
           ...persisted,
-          isAuthenticated: Boolean(persisted.RefreshToken),
+          isAuthenticated: false, // 刷新后默认未认证，等待验证 refreshToken
         };
       },
     }

@@ -30,18 +30,11 @@ export function useLogin() {
     onSuccess: (data: any) => {
       // console.log("Login successful:", data);
       // Navigate to the dashboard or another page on successful login
-      const decoded = jwtDecode<any>(data.accessToken);
-
       useAuthStore.getState().login({
         accessToken: data.accessToken,
         accessTokenExpiresAtUtc: data.accessTokenExpiresAtUtc,
         refreshToken: data.refreshToken,
         refreshTokenExpiresAtUtc: data.refreshTokenExpiresAtUtc,
-        user: {
-          id: decoded.sub!,
-          email: decoded.email!,
-          name: decoded.name!,
-        },
       });
       navigate("/dashboard");
     },

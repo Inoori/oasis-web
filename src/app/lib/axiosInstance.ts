@@ -3,9 +3,11 @@ import axios from "axios";
 import type { AxiosInstance } from "axios";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
 import type { AxiosAuthRefreshOptions } from "axios-auth-refresh";
+import { jwtDecode } from "jwt-decode";
+import { api } from "@/api/auth";
 
 // 根据环境变量设置基础配置
-const baseURL = import.meta.env.VITE_API_BASE_URL;
+export const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 const instance: AxiosInstance = axios.create({
   baseURL,
@@ -42,9 +44,7 @@ const refreshAuthLogic = async (failedRequest: any) => {
   }
 
   try {
-    const response = await axios.post(baseURL + "/api/auth/refresh", {
-      refreshToken,
-    });
+    const response = await api.refresh(refreshToken);
 
     const {
       accessToken: newAccessToken,
@@ -54,7 +54,9 @@ const refreshAuthLogic = async (failedRequest: any) => {
     } = response.data;
 
     // 更新 Zustand store
-    useAuthStore.getState().refreshToken({
+    const state = useAuthStore.getState();
+
+    state.setToken({
       accessToken: newAccessToken,
       accessTokenExpiresAtUtc: accessTokenExpiresAtUtc,
       refreshToken: newRefreshToken,
