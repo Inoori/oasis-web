@@ -20,7 +20,7 @@ export default function Layout() {
           <TopBar />
           <div
             id="container"
-            className="grid flex-1 grid-cols-[0.5fr_3fr_0.7fr] py-24"
+            className="grid flex-1 grid-cols-[0.5fr_3fr_0.7fr] py-4"
           >
             <main className="relative col-start-2 flex flex-col">
               <Outlet />

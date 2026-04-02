@@ -5,10 +5,9 @@ import {
   SidebarGroup,
   SidebarHeader,
   SidebarRail,
+  SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
-import Logo from "@/components/Logo";
-
 import SiderbarNavItems from "@/components/SiderbarNavItems";
 import { cn } from "@/lib/utils";
 import Uploader from "@/data/Uploader";
@@ -18,20 +17,14 @@ export default function AppSidebar() {
   const { open } = useSidebar();
 
   return (
-    <Sidebar
-      collapsible="icon"
-      className="items-center justify-center duration-100"
-    >
-      <SidebarHeader className="transition-all duration-300">
-        {open ? <Logo /> : <LogoSmall />}
+    <Sidebar collapsible="icon">
+      <SidebarHeader className="mt-4 flex flex-row justify-between p-2 transition-all duration-300">
+        <LogoSmall className="block h-auto" />
+        {open && <SidebarTrigger />}
       </SidebarHeader>
-      <SidebarGroup>
+      <SidebarGroup className="mt-2">
         <SidebarContent
-          className={cn(
-            "overflow-hidden transition-all duration-300",
-            open && "mt-7 pl-6",
-            !open && "mt-4 items-center gap-8"
-          )}
+          className={cn("gap-3 overflow-hidden transition-all duration-300")}
         >
           <SiderbarNavItems />
         </SidebarContent>

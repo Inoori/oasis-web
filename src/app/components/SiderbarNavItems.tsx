@@ -70,7 +70,7 @@ export default function SiderbarNavItems() {
         <NavLink
           to={item.to}
           className={({ isActive }) =>
-            `group/nav-link flex items-center gap-3 px-6 py-3 text-sm font-medium text-primary transition-all duration-300 group-hover/menu-item:rounded-sm group-hover/menu-item:bg-secondary/90 group-hover/menu-item:text-primary ${isActive ? "active rounded-sm bg-secondary/90 text-primary" : ""} `
+            `group/nav-link flex items-center gap-3 px-1.5 py-2 text-sm font-medium text-primary transition-all duration-300 group-hover/menu-item:rounded-sm group-hover/menu-item:bg-secondary/90 group-hover/menu-item:text-primary ${isActive ? "active rounded-sm bg-secondary/90 text-primary" : ""} `
           }
         >
           <span
@@ -85,12 +85,12 @@ export default function SiderbarNavItems() {
           )}
         </NavLink>
       ) : (
-        <Tooltip>
+        <Tooltip key={item.to}>
           <TooltipTrigger>
             <NavLink
               to={item.to}
               className={({ isActive }) =>
-                `group/nav-link ${isActive ? "active" : ""}`
+                `group/nav-link flex items-center gap-3 px-1.5 py-2 text-sm font-medium text-primary transition-all duration-300 group-hover/menu-item:rounded-sm group-hover/menu-item:bg-secondary/90 group-hover/menu-item:text-primary ${isActive ? "active rounded-md bg-secondary/90 text-primary" : ""} `
               }
             >
               <span
@@ -100,7 +100,7 @@ export default function SiderbarNavItems() {
               </span>
             </NavLink>
           </TooltipTrigger>
-          <TooltipContent>{item.label}</TooltipContent>
+          <TooltipContent side="right">{item.label}</TooltipContent>
         </Tooltip>
       )}
     </SidebarMenuItem>

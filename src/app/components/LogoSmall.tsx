@@ -1,8 +1,13 @@
+import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
-export default function LogoSmall() {
+type LogoSmallProps = {
+  className?: string;
+};
+
+export default function LogoSmall({ className }: LogoSmallProps) {
   return (
-    <div className="flex h-12 items-center justify-center">
+    <div className={cn(`flex h-12 items-center justify-center`, className)}>
       <Avatar>
         {/* grayscale */}
         <AvatarImage

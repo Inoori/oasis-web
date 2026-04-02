@@ -26,7 +26,7 @@ export default function DashboardLayout() {
 
   return (
     <LayoutGroup>
-      <motion.div layout className="flex flex-col items-center gap-6">
+      <motion.div layout className="flex flex-col gap-6">
         {isDashboardFetching ? (
           <motion.div
             key="dashboard-spinner"

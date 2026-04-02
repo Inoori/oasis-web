@@ -7,37 +7,24 @@ export default function ThemeToggle() {
   const { theme, setTheme } = useTheme();
 
   return (
-    <>
-      <button
-        className={cn(
-          "flex h-7 w-12 cursor-pointer flex-row items-center rounded-full bg-accent px-0.5",
-          theme === "light" ? "justify-start" : "justify-end"
-        )}
-        onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-      >
-        <motion.div
-          className="rounded-full bg-primary-foreground p-1 text-primary"
-          layout
-          transition={{ type: "spring", visualDuration: 0.4, bounce: 0.2 }}
-        >
-          {theme === "light" ? (
-            <HiOutlineSun className="size-5" />
-          ) : (
-            <HiOutlineMoon className="size-5" />
-          )}
-        </motion.div>
-      </button>
-
-      {/* <div
-        className="flex cursor-pointer rounded-full p-1 transition-colors duration-300 hover:bg-accent"
-        onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+    <button
+      className={cn(
+        "flex h-7 w-12 cursor-pointer flex-row items-center rounded-full bg-accent px-0.5",
+        theme === "light" ? "justify-start" : "justify-end"
+      )}
+      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+    >
+      <motion.div
+        className="rounded-full bg-primary-foreground p-1 text-primary"
+        layout
+        transition={{ type: "spring", visualDuration: 0.4, bounce: 0.2 }}
       >
         {theme === "light" ? (
-          <HiOutlineSun className="h-5 w-5" />
+          <HiOutlineSun className="size-5" />
         ) : (
-          <HiOutlineMoon className="h-5 w-5" />
+          <HiOutlineMoon className="size-5" />
         )}
-      </div> */}
-    </>
+      </motion.div>
+    </button>
   );
 }
