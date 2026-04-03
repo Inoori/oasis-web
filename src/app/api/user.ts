@@ -8,16 +8,9 @@ export type User = {
 };
 
 export const api = {
-  getUser: (id: string) => {
-    if (!id) {
-      return Promise.reject(new Error("User ID is required"));
-    }
-    return request.get(`api/users/`, {
-      params: {
-        userid: id,
-      },
-    }) as unknown as Promise<User>;
-  },
+  //todo:get user form cookies
+  getUser: (signal?: AbortSignal) =>
+    request.get(`api/users/me`, { signal }) as unknown as Promise<User>,
 
   updateProfile: (data: Partial<User>) => {
     return request.post(

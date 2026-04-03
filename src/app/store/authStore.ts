@@ -1,99 +1,36 @@
+// src/store/authStore.ts
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import type { User } from "@/api/user";
+import { api as authApi } from "@/api/auth";
+import { api as userApi } from "@/api/user";
 
-export type AuthState = {
+interface AuthState {
+  user: User | null;
   isAuthenticated: boolean;
-  AccessToken?: string;
-  AccessTokenExpiresAt?: Date;
-  RefreshToken?: string;
-  RefreshTokenExpiresAt?: Date;
+  isLoading: boolean;
 
-  // actions
-  login: (payload: {
-    accessToken: string;
-    refreshToken: string;
-    accessTokenExpiresAtUtc: Date;
-    refreshTokenExpiresAtUtc: Date;
-  }) => void;
+  checkAuth: () => Promise<void>;
+  logout: () => Promise<void>;
+}
 
-  setToken: (payload: {
-    accessToken: string;
-    accessTokenExpiresAtUtc: Date;
-    refreshToken: string;
-    refreshTokenExpiresAtUtc: Date;
-  }) => void;
+export const useAuthStore = create<AuthState>((set) => ({
+  user: null,
+  isLoading: true,
+  isAuthenticated: false,
 
-  logout: () => void;
-};
-
-const REFRESH_TOKEN_KEY = "oasis-refreshToken";
-
-export const useAuthStore = create<AuthState>()(
-  persist(
-    (set) => ({
-      isAuthenticated: false,
-      AccessToken: undefined,
-      AccessTokenExpiresAt: undefined,
-      RefreshToken: undefined,
-      RefreshTokenExpiresAt: undefined,
-
-      login: ({
-        accessToken,
-        accessTokenExpiresAtUtc,
-        refreshToken,
-        refreshTokenExpiresAtUtc,
-      }) => {
-        // localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
-        set({
-          isAuthenticated: true,
-          AccessToken: accessToken,
-          RefreshToken: refreshToken,
-          AccessTokenExpiresAt: accessTokenExpiresAtUtc,
-          RefreshTokenExpiresAt: refreshTokenExpiresAtUtc,
-        });
-      },
-
-      setToken: ({
-        accessToken,
-        accessTokenExpiresAtUtc,
-        refreshToken,
-        refreshTokenExpiresAtUtc,
-      }) => {
-        // localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
-        set({
-          isAuthenticated: true,
-          AccessToken: accessToken,
-          AccessTokenExpiresAt: accessTokenExpiresAtUtc,
-          RefreshToken: refreshToken,
-          RefreshTokenExpiresAt: refreshTokenExpiresAtUtc,
-        });
-      },
-
-      logout: () => {
-        // localStorage.removeItem(REFRESH_TOKEN_KEY);
-        set({
-          isAuthenticated: false,
-          AccessToken: undefined,
-          RefreshToken: undefined,
-          AccessTokenExpiresAt: undefined,
-          RefreshTokenExpiresAt: undefined,
-        });
-      },
-    }),
-    {
-      name: REFRESH_TOKEN_KEY,
-      partialize: (state) => ({
-        // 只持久化 refreshToken
-        RefreshToken: state.RefreshToken,
-      }),
-      merge: (persistedState, currentState) => {
-        const persisted = (persistedState ?? {}) as Partial<AuthState>;
-        return {
-          ...currentState,
-          ...persisted,
-          isAuthenticated: false, // 刷新后默认未认证，等待验证 refreshToken
-        };
-      },
+  checkAuth: async () => {
+    try {
+      const user = await userApi.getUser();
+      set({ user, isAuthenticated: true, isLoading: false });
+    } catch (error) {
+      set({ user: null, isAuthenticated: false, isLoading: false });
+      // toast.error("Failed to authenticate. Please log in again.");
+      // console.error("Authentication error:", error);
     }
-  )
-);
+  },
+
+  logout: async () => {
+    await authApi.logout();
+    set({ user: null, isAuthenticated: false, isLoading: false });
+  },
+}));

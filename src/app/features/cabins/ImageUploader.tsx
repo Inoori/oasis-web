@@ -1,7 +1,6 @@
 import { ImageIcon, X } from "lucide-react";
 import * as React from "react";
-import { toast } from "sonner";
-
+import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
 import {
   FileUpload,
@@ -20,10 +19,8 @@ export const title = "Image Dropzone";
 export default function ImageUploader(props: FileUploadProps) {
   const files = (props.value as File[]) || [];
 
-  const onFileReject = React.useCallback((file: File, message: string) => {
-    toast.error(message, {
-      description: `"${file.name}" was rejected`,
-    });
+  const onFileReject = React.useCallback((_: File, message: string) => {
+    toast.error(message);
   }, []);
 
   return (

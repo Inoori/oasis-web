@@ -1,8 +1,8 @@
+import { useAuthStore } from "@/store/authStore";
 import ProfileSidebar from "./ProfileSidebar";
-import { useUser } from "./useUser";
 
 export default function EditProfile() {
-  const { data: user } = useUser();
+  const user = useAuthStore((state) => state.user)!;
 
   return (
     <section className="grid grid-cols-[22rem_1fr] pt-6">

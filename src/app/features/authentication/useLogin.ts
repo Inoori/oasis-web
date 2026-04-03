@@ -1,9 +1,9 @@
 import { api } from "@/api/auth";
+import { api as userApi } from "@/api/user";
+import { useAuthStore } from "@/store/authStore";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useAuthStore } from "@/store/authStore";
-import { jwtDecode } from "jwt-decode";
 
 type LoginParams = {
   email: string;
@@ -27,16 +27,9 @@ export function useLogin() {
   const { mutate, isPending } = useMutation({
     mutationFn: async ({ email, password }: LoginParams) =>
       api.login(email, password),
-    onSuccess: (data: any) => {
-      // console.log("Login successful:", data);
-      // Navigate to the dashboard or another page on successful login
-      useAuthStore.getState().login({
-        accessToken: data.accessToken,
-        accessTokenExpiresAtUtc: data.accessTokenExpiresAtUtc,
-        refreshToken: data.refreshToken,
-        refreshTokenExpiresAtUtc: data.refreshTokenExpiresAtUtc,
-      });
-      navigate("/dashboard");
+    onSuccess: async () => {
+      await useAuthStore.getState().checkAuth(); // 刷新认证状态
+      navigate("/"); // 登录成功后跳转到主页
     },
     onError: (error) => {
       toast.error("Email or password is incorrect, please try again.");

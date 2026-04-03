@@ -5,6 +5,8 @@ export const api = {
   login: (email: string, password: string) =>
     request.post("api/auth/login", { email, password }),
 
+  logout: () => request.post("api/auth/logout"),
+
   refresh: (refreshToken: string, signal?: AbortSignal) =>
     axios.post(
       baseURL + "/api/auth/refresh",

@@ -15,6 +15,7 @@ import NewUsers from "./pages/Users";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Profile from "./pages/Profile";
+import { LoadingBarContainer } from "react-top-loading-bar";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,32 +34,34 @@ const App: React.FC = () => {
         <ReactQueryDevtools initialIsOpen={false} />
       )}
       <ThemeProvider defaultTheme="dark" storageKey="oasis-ui-theme">
-        <TooltipProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route
-                element={
-                  <ProtectedRoute>
-                    <Layout />
-                  </ProtectedRoute>
-                }
-              >
-                <Route index element={<Navigate replace to="/dashboard" />} />
-                <Route path="dashboard" element={<Dashboard />} />
-                <Route path="/bookings" element={<Bookings />} />
-                <Route path="/bookings/:id" element={<BookingDetail />} />
-                <Route path="/bookings/:id/checkin" element={<Checkin />} />
-                <Route path="/cabins" element={<Cabins />} />
-                <Route path="/users" element={<NewUsers />} />
-                <Route path="/settings" element={<div>Settings Page</div>} />
-                <Route path="/profile" element={<Profile />} />
-              </Route>
+        <LoadingBarContainer>
+          <TooltipProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route
+                  element={
+                    <ProtectedRoute>
+                      <Layout />
+                    </ProtectedRoute>
+                  }
+                >
+                  <Route index element={<Navigate replace to="/dashboard" />} />
+                  <Route path="dashboard" element={<Dashboard />} />
+                  <Route path="/bookings" element={<Bookings />} />
+                  <Route path="/bookings/:id" element={<BookingDetail />} />
+                  <Route path="/bookings/:id/checkin" element={<Checkin />} />
+                  <Route path="/cabins" element={<Cabins />} />
+                  <Route path="/users" element={<NewUsers />} />
+                  <Route path="/settings" element={<div>Settings Page</div>} />
+                  <Route path="/profile" element={<Profile />} />
+                </Route>
 
-              <Route path="/login" element={<Login />} />
-              <Route path="*" element={<PageNotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
+                <Route path="/login" element={<Login />} />
+                <Route path="*" element={<PageNotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </TooltipProvider>
+        </LoadingBarContainer>
       </ThemeProvider>
       <ToastContainer
         position="top-center"

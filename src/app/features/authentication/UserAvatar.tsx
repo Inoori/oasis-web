@@ -1,31 +1,23 @@
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { HiOutlineUser } from "react-icons/hi2";
 import { GoPerson, GoSignOut, GoSun, GoMoon } from "react-icons/go";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useAuthStore } from "@/store/authStore";
 import UserIcon from "@/components/UserIcon";
-import { useUser } from "./useUser";
 import { FaGithub } from "react-icons/fa";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useTheme } from "@/components/theme-provider";
+import { useAuthStore } from "@/store/authStore";
 
 const UserAvatar1: React.FC = () => {
-  // const { user: { user_metadata: { fullName, avatar } = {} } = {} } = useUser();
-
   const avatar = "default-user.jpg";
   const fullName = "UserAvatar";
 
@@ -42,10 +34,14 @@ const UserAvatar1: React.FC = () => {
 };
 
 export default function UserAvatar() {
-  const { data: user, error } = useUser();
   const { theme, setTheme } = useTheme();
 
-  if (error) return null;
+  const user = useAuthStore((state) => state.user);
+  const signout = useAuthStore((state) => state.logout);
+
+  const navgae = useNavigate();
+
+  if (!user) return null;
 
   return (
     <DropdownMenu>
@@ -115,7 +111,12 @@ export default function UserAvatar() {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => useAuthStore.getState().logout()}>
+          <DropdownMenuItem
+            onClick={() => {
+              signout();
+              navgae("/login");
+            }}
+          >
             <GoSignOut className="stroke-1" />
             <span>Sign out</span>
           </DropdownMenuItem>
