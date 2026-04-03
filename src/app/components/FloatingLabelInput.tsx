@@ -31,7 +31,7 @@ export default function FloatingLabelInput(
     };
     inputElement = React.cloneElement(children, childProps);
   } else {
-    inputElement = <Input {...inputProps} placeholder=" " className="peer" />;
+    inputElement = <Input {...inputProps} placeholder="" className="peer" />;
   }
 
   return (
