@@ -1,7 +1,7 @@
 import { api } from "@/api/auth";
-import { api as userApi } from "@/api/user";
 import { useAuthStore } from "@/store/authStore";
 import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -32,7 +32,15 @@ export function useLogin() {
       navigate("/"); // 登录成功后跳转到主页
     },
     onError: (error) => {
-      toast.error("Email or password is incorrect, please try again.");
+      if (error instanceof AxiosError) {
+        toast.error(
+          error.response?.data?.detail ||
+            error.message ||
+            "Something went wrong, please try again."
+        );
+      } else {
+        toast.error("Email or password is incorrect, please try again.");
+      }
       console.error("Login failed:", error);
     },
   });
