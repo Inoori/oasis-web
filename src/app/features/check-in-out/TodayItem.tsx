@@ -105,7 +105,7 @@ export default function TodayItem({ stay }: { stay: BookingWithRelations }) {
         </AlertDialogContent>
       </AlertDialog>
 
-      {isCheckOutPending && Id === 166 && (
+      {isCheckOutPending && (
         <TopTip title="Checking out..." media={<Spinner />} />
       )}
     </li>
