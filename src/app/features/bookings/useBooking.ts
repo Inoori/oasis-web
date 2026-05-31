@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import type { ODataResponse, QueryParams } from "@/api/query";
 import { useParams } from "react-router-dom";
 import { errorHandle } from "@/lib/errorHandle";
+import { TODAY_ACTIVITY_KEY } from "@/features/check-in-out/useTodayActivity";
 
 export const BOOKINGS_TABLE = "bookings";
 
@@ -64,6 +65,7 @@ export function useCheckInBooking(id: bigint) {
     onSuccess: () => {
       queryClient.removeQueries({ queryKey: [BOOKINGS_TABLE, id] });
       queryClient.invalidateQueries({ queryKey: [BOOKINGS_TABLE] });
+      queryClient.invalidateQueries({ queryKey: [TODAY_ACTIVITY_KEY] });
     },
     onError: (error: unknown) =>
       errorHandle(error)
@@ -84,6 +86,7 @@ export function useCheckOutBooking(id: bigint) {
     onSuccess: () => {
       queryClient.removeQueries({ queryKey: [BOOKINGS_TABLE, id] });
       queryClient.invalidateQueries({ queryKey: [BOOKINGS_TABLE] });
+      queryClient.invalidateQueries({ queryKey: [TODAY_ACTIVITY_KEY] });
     },
     onError: (error: unknown) =>
       errorHandle(error)

@@ -90,7 +90,7 @@ export function useOptimisticDeleteCabin() {
       await queryClient.cancelQueries({ queryKey: [CABINS_TABLE] });
       const previousCabins = queryClient.getQueryData([CABINS_TABLE]);
       queryClient.setQueryData([CABINS_TABLE], (old: any) => {
-        return old.filter((cabin: Cabin) => cabin.Id !== cabinId);
+        return old.value.filter((cabin: Cabin) => cabin.Id !== cabinId);
       });
       return { previousCabins };
     },

@@ -34,7 +34,9 @@ export default function BookingTable() {
     $top: 10,
     $expand: "Cabin,Guest",
     $count: true,
-    $filter: status ? `Status eq '${status}'` : undefined,
+    $filter: status
+      ? `Status eq '${status}' and Cabin ne null`
+      : "Cabin ne null",
     $orderby: sort ? sort : undefined,
   });
 

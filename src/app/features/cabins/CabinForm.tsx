@@ -107,13 +107,10 @@ export default function CabinForm({ cabin, openChange, open }: CabinFormProps) {
                   {...register("MaxCapacity", {
                     required: "Maximum capacity is required",
                     validate: (value) => {
-                      const valid = validator.isInt(
-                        value as unknown as string,
-                        {
-                          min: 1,
-                          max: 10,
-                        }
-                      );
+                      const valid = validator.isInt(String(value), {
+                        min: 1,
+                        max: 10,
+                      });
                       if (!valid)
                         return "Maximum capacity must be a number between 1 and 10";
 
@@ -132,7 +129,7 @@ export default function CabinForm({ cabin, openChange, open }: CabinFormProps) {
                     required: "Regular price is required",
                     validate: (value) => {
                       const valid = validator.isCurrency(
-                        value as unknown as string,
+                        String(value),
                         {
                           allow_negatives: false,
                           digits_after_decimal: [1, 2],
@@ -157,7 +154,7 @@ export default function CabinForm({ cabin, openChange, open }: CabinFormProps) {
                     required: "Discount is required",
                     validate: (value) => {
                       const valid = validator.isCurrency(
-                        value as unknown as string,
+                        String(value),
                         {
                           allow_negatives: false,
                         }

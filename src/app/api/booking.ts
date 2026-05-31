@@ -58,6 +58,6 @@ export const api = {
 
   getStaysTodayActivity: () =>
     request.get(
-      `/odata/bookings?$expand=Guest($select=FullName,Nationality,CountryFlag)&$filter=((Status eq 0 and StartDate eq ${getToday()}) or (Status eq 1 and EndDate eq ${getToday()}))&$orderby=CreatedAt`
+      `/odata/bookings?$expand=Cabin($select=Id),Guest($select=FullName,Nationality,CountryFlag)&$filter=((Status eq 0 and StartDate eq ${getToday()} and Cabin ne null) or (Status eq 1 and EndDate eq ${getToday()} and Cabin ne null))&$orderby=CreatedAt`
     ),
 };
